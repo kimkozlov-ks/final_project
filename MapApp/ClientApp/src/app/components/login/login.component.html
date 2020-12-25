@@ -1,0 +1,14 @@
+<form>
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input #spy type="text" id="username" class="form-control" [(ngModel)]="username" minlength="8" required name="username"/>
+    {{spy.className }}
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" class="form-control" [(ngModel)]="password" minlength="8" required name="passwrod"/>
+  </div>
+  <div>
+    <input type="submit" name="Login" class="btn btn-primary" />
+  </div>
+</form>
