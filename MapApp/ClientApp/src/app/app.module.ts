@@ -7,9 +7,9 @@ import {HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MarkerService} from './services/marker-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RouterModule, Routes} from "@angular/router";
-import {NavMenuComponent} from "./components/nav-menu/nav-menu.component";
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './auth/login/login.component';
 import {FormsModule} from "@angular/forms";
+import {AuthTokenInterceptor} from "./auth/service/auth-interceptor.service";
 
 const appRoutes: Routes=[
   {path: '', component: LoginComponent},
@@ -31,7 +31,12 @@ const appRoutes: Routes=[
     FormsModule
   ],
   providers: [
-    MarkerService
+    MarkerService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

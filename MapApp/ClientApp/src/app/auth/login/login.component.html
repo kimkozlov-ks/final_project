@@ -9,6 +9,6 @@
     <input type="password" id="password" class="form-control" [(ngModel)]="password" minlength="8" required name="passwrod"/>
   </div>
   <div>
-    <input type="submit" name="Login" class="btn btn-primary" />
+    <input type="submit" name="Login" class="btn btn-primary" (click)="login()"/>
   </div>
 </form>

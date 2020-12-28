@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Auth.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.API
 {
@@ -26,6 +31,39 @@ namespace Auth.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "localhost",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+            
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtTokenSecret"]))
+                    };
+                });
+            
+            var connectionString = Configuration["DbConnectionString"];
+            services.AddDbContext<AuthDbContext>(
+                b => b.UseNpgsql(
+                    connectionString, 
+                    m => m.MigrationsAssembly("Auth.API")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,14 +73,33 @@ namespace Auth.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            EnsureDbCreated(app);
 
             app.UseHttpsRedirection();
+            
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+        
+        private static void EnsureDbCreated(IApplicationBuilder app)
+        {
+            using var serviceScope = app
+                .ApplicationServices
+                .GetService<IServiceScopeFactory>()
+                .CreateScope();
+
+            var context = serviceScope.ServiceProvider
+                .GetRequiredService<AuthDbContext>();
+            context.Database.EnsureCreated();
         }
     }
 }
