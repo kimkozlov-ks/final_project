@@ -53,7 +53,9 @@ namespace Auth.API
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidateLifetime = true,
+                        ValidateLifetime = false,
+                        ValidateIssuerSigningKey = true,
+                        RequireSignedTokens = true,
                         ClockSkew = TimeSpan.Zero,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtTokenSecret"]))
                     };
@@ -78,13 +80,15 @@ namespace Auth.API
 
             app.UseHttpsRedirection();
             
-            app.UseCors(x => x
-                .AllowAnyOrigin()
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
