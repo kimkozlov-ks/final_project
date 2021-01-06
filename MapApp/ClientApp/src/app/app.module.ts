@@ -14,10 +14,11 @@ import { ProfileComponent } from './components/profile/profile.component';
 import {AccessGuard} from "./auth/access-guard.guard";
 import {PermissionType} from "./auth/permissionType";
 import { MenuComponent } from './map/components/menu/menu.component';
-import { MenuItemComponent } from './map/components/menu-item/menu-item.component';
+import { MenuItemComponent } from './map/components/menu/menu-item/menu-item.component';
 
 const appRoutes: Routes=[
   {path: '', component: LoginComponent},
+  {path: 'profile', component: ProfileComponent},
   {
     path: 'map',
     component: MapComponent,
