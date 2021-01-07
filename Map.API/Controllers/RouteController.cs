@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Map.API.Model;
 using Map.API.Services;
@@ -19,13 +21,16 @@ namespace Map.API.Controllers
             _routeService = routeService;
         }
 
-        // [HttpGet("all")]
-        // public async Task<List<RouteDto>> GetAllRoutes()
-        // {    
-        //     //
-        //     
-        //     return );
-        // }
+        [HttpGet("all")]
+        public async Task<List<RouteDto>> GetAllRoutes()
+        {
+            //var identityUser = HttpContext.User;
+            // identityUser.FindFirst( ClaimTypes.NameIdentifier).Value
+            
+            var routes = await _routeService.GetRoutesAsync("");
+
+            return routes;
+        }
 
         [HttpPost("add")]
         public async Task<IActionResult> AddRoute([FromBody] RouteDto routeDto)
