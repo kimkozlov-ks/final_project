@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Data", "Infr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Data", "Auth.Data\Auth.Data.csproj", "{D27391F0-98CC-4810-8D02-43022FC1E660}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Map.API", "Map.API\Map.API.csproj", "{B9CFC5CF-4122-4950-86C1-123674E627C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Map.Data", "Map.Data\Map.Data.csproj", "{C0396B40-4F1C-4533-905A-A81ADD35F4D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{D27391F0-98CC-4810-8D02-43022FC1E660}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D27391F0-98CC-4810-8D02-43022FC1E660}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D27391F0-98CC-4810-8D02-43022FC1E660}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9CFC5CF-4122-4950-86C1-123674E627C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9CFC5CF-4122-4950-86C1-123674E627C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9CFC5CF-4122-4950-86C1-123674E627C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9CFC5CF-4122-4950-86C1-123674E627C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0396B40-4F1C-4533-905A-A81ADD35F4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0396B40-4F1C-4533-905A-A81ADD35F4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0396B40-4F1C-4533-905A-A81ADD35F4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0396B40-4F1C-4533-905A-A81ADD35F4D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F80CD35B-FFD6-40BC-95B7-CA026A024DF7} = {A5F99400-BC1A-44BC-B3D7-854759A3EC5D}
