@@ -1,5 +1,5 @@
 <ul class="list-group">
-  <li class="list-group-item" *ngFor="let item of menuItems; let i = index">
+  <li #items class="list-group-item" *ngFor="let item of menuItems; let i = index" (click)="menuItemClicked(i)">
     {{item.name}}
   </li>
 </ul>

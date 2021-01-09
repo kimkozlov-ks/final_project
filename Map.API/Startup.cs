@@ -35,6 +35,17 @@ namespace Map.API
         {
             services.AddControllers();
             
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "localhost",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+            
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -78,7 +89,13 @@ namespace Map.API
             }
 
             app.UseHttpsRedirection();
-
+            
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
+            
             app.UseRouting();
 
             app.UseAuthorization();

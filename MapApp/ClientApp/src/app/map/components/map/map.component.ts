@@ -1,6 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet'; import 'leaflet-routing-machine';
-import { MarkerService } from '../../services/marker-service.service';
+import {MapDispatcherService} from "../../services/map-dispatcher.service";
+import {MapAction} from "../../enums/MapAction";
+import {RouteService} from "../../services/route.service";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -28,7 +30,8 @@ export class MapComponent implements AfterViewInit {
   private waypoints = [];
   private route = null;
 
-  constructor() {
+  constructor(private mapDispatcherService: MapDispatcherService,
+              private routeService: RouteService) {
   }
 
   ngAfterViewInit(): void {
@@ -40,10 +43,26 @@ export class MapComponent implements AfterViewInit {
   }
 
   onMapClick(e) {
-    this.waypoints.push(e.latlng);
-    this.route.setWaypoints(this.waypoints);
-    this.route.addTo(this.map);
-    console.log(this.route);
+    switch (this.mapDispatcherService.mapAction)
+    {
+      case MapAction.ADD_ROUTE_POINT:
+        this.waypoints.push(e.latlng);
+        this.route.setWaypoints(this.waypoints);
+        this.route.addTo(this.map);
+
+        if(this.waypoints.length > 1){
+        this.routeService.updateRoute(this.route);
+        }
+        break;
+      case MapAction.EDIT_ROUTE:
+        break;
+      case MapAction.NONE:
+        break;
+
+      default:
+        break;
+
+    }
   }
 
   private initMap(): void {
