@@ -24,8 +24,7 @@ namespace Map.API.Controllers
         [HttpGet("all")]
         public async Task<List<RouteDto>> GetAllRoutes()
         {
-            //var identityUser = HttpContext.User;
-            // identityUser.FindFirst( ClaimTypes.NameIdentifier).Value
+           
             
             var routes = await _routeService.GetRoutesAsync("");
 
@@ -36,8 +35,12 @@ namespace Map.API.Controllers
         public async Task<IActionResult> AddRoute([FromBody] RouteDto routeDto)
         {
             if (!ModelState.IsValid) return BadRequest();
+            
+            var identityUser = HttpContext.User;
 
-            await _routeService.AddRoute(routeDto);
+            var userId = identityUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            
+            await _routeService.AddRoute(routeDto, userId);
 
             return Ok();
         }
