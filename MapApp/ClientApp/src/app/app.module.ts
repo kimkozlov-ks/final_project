@@ -15,17 +15,21 @@ import {AccessGuard} from "./auth/access-guard.guard";
 import {PermissionType} from "./auth/permissionType";
 import { MenuComponent } from './map/components/menu/menu.component';
 import { MenuItemComponent } from './map/components/menu/menu-item/menu-item.component';
+import { RegisterComponent } from './auth/components/register/register.component';
+import { NotFoundComponent } from './components/error/not-found/not-found.component';
 
 const appRoutes: Routes=[
   {path: '', component: LoginComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
   {
     path: 'map',
     component: MapComponent,
     canActivate:[AccessGuard],
     data: { requiredPermissions: [] }
   },
-  {path: '**', component: LoginComponent },
+  {path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
@@ -36,6 +40,8 @@ const appRoutes: Routes=[
     ProfileComponent,
     MenuComponent,
     MenuItemComponent,
+    RegisterComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
-<div class="profile" *ngIf="user">
-  {{user.username}}
+<div *ngIf="user">
+  Username: {{user.username}}
 </div>
-<div class="profile" (click)="logout()">
+<div (click)="logout()">
   Logout
 </div>
+

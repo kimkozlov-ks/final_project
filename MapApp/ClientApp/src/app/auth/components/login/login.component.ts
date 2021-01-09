@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
 
   username: string = '';
   password: string = '';
+  isFailed: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {
     this.authService.isLoggedIn().subscribe(status => {
@@ -18,7 +19,6 @@ export class LoginComponent implements OnInit {
         router.navigate(['/map']);
       }
       else {
-
       }
     });
   }
@@ -28,5 +28,9 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.login(this.username, this.password);
+  }
+
+  toRegister() {
+    this.router.navigate(['/register']);
   }
 }

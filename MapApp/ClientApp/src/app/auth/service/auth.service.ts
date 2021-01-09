@@ -53,6 +53,7 @@ export class AuthService {
   }
 
   logout() {
+    console.log("logout");
     const jsonBody = JSON.stringify({ username: this.$userInfo.value.username, password: "-" });
     const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8' });
     this.http.post(`${this.apiUrl}/logout`, jsonBody, { headers, withCredentials: true }, )
@@ -95,7 +96,8 @@ export class AuthService {
   }
 
   onLogoutSuccess() {
-     this.router.navigate(['/login']);
+    console.log("logout");
+    this.router.navigate(['/login']);
      localStorage.removeItem(this.storageKey);
      this.$accessToken.next(null);
      this.$userInfo.next(null);
@@ -105,5 +107,13 @@ export class AuthService {
     return this.$userInfo.value &&
       this.$userInfo.value.expires &&
     this.$userInfo.value.expires < (Date.now() - this.requestTimeoutMilliseconds) / 1000;
+  }
+
+  register(username: string, password: string) {
+    const jsonBody = JSON.stringify({ username, password });
+    const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8' });
+    this.http.post(`${this.apiUrl}/register`, jsonBody, { headers, withCredentials: true })
+      .pipe(tap(this.processToken.bind(this)))
+      .subscribe();
   }
 }
