@@ -67,28 +67,52 @@ namespace Auth.API.Controllers
             AddRefreshTokenCookie(newRefreshToken);
             return Ok(new ResponseAccessToken(accessToken));
         }
+        
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] UserDto userDto)
+        {    
+            User user = new User();
+            user.Username = userDto.Username;
+            user.Password = userDto.Password;
+            user.Role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Role1");
+            user.Role.RolePermissions = await _context.RolePermissions
+                .Select(p => p)
+                .Where(rp => rp.RoleId == user.RoleId).ToListAsync();
+            var accessToken = GenerateAccessToken(user);
+            var newRefreshToken = Guid.NewGuid();
+
+            if(user.RefreshToken == null)
+            {
+                user.RefreshToken = new RefreshToken
+                {
+                    Refresh = newRefreshToken,
+                    UserId = user.Id
+                };
+            }
+            else
+            {
+                user.RefreshToken.Refresh = newRefreshToken;
+            }
+            
+            await _context.Users.AddAsync(user);
+            var isSaved = await _context.SaveChangesAsync();
+
+            if (isSaved == 0)
+            {
+                return Unauthorized();
+            }
+
+            AddRefreshTokenCookie(newRefreshToken);
+            return Ok(new ResponseAccessToken(accessToken));
+        }
 
         [HttpPost("logout")]
-        public async Task<ActionResult> Logout([FromBody] UserDto model)
+        public ActionResult Logout([FromBody] UserDto model)
         {
             var refreshTokenStr = Request.Cookies["Refresh"];
             if(Guid.TryParse(refreshTokenStr, out var refreshToken))
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-
-                var identityUser = HttpContext.User;
-
-                var user = await _context.Users
-                    .Include(u => u.RefreshToken)
-                    .Include(u => u.Role)
-                    .ThenInclude(r => r.RolePermissions)
-                    .FirstOrDefaultAsync(u => 
-                        u.Username == model.Username);
-
-                if (user.RefreshToken != null && user.RefreshToken.Refresh == refreshToken)
-                {
-                    Response.Cookies.Delete("Refresh");
-                }
+                Response.Cookies.Delete("Refresh");
             }
             
             return Ok();
