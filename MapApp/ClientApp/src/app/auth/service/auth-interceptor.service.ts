@@ -39,9 +39,6 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   }
 
   injectAuthorizationHeader(req: HttpRequest<any>): HttpRequest<any> {
-
-    console.log(this.authService);
-
     return !this.authService.$accessToken.value
       ? req
       : req.clone({

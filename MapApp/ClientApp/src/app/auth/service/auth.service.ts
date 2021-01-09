@@ -1,6 +1,6 @@
 import {Injectable, Output} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import jwt_decode from "jwt-decode";
 import UserInfo from "../userInfo";
@@ -72,14 +72,13 @@ export class AuthService {
     return this.$userInfo.getValue();
   }
 
-  refresh()  {
+  refresh() : Observable<any> {
     if (!localStorage[this.storageKey]) {
       return throwError('there is no refresh token, need to login');
     }
 
-    this.http.get(`${this.apiUrl}/refresh`, { withCredentials: true})
-      .pipe(tap(this.processToken.bind(this)))
-      .subscribe();
+    return this.http.get(`${this.apiUrl}/refresh`, { withCredentials: true})
+      .pipe(tap(this.processToken.bind(this)));
   }
 
   processToken(response: any) {
