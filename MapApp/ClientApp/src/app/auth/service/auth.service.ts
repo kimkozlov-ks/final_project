@@ -109,11 +109,10 @@ export class AuthService {
     this.$userInfo.value.expires < (Date.now() - this.requestTimeoutMilliseconds) / 1000;
   }
 
-  register(username: string, password: string) {
+  register(username: string, password: string) : Observable<any>{
     const jsonBody = JSON.stringify({ username, password });
     const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8' });
-    this.http.post(`${this.apiUrl}/register`, jsonBody, { headers, withCredentials: true })
+    return this.http.post(`${this.apiUrl}/register`, jsonBody, { headers, withCredentials: true })
       .pipe(tap(this.processToken.bind(this)))
-      .subscribe();
   }
 }

@@ -70,11 +70,21 @@ namespace Auth.API.Controllers
         
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] UserDto userDto)
-        {    
-            User user = new User();
-            user.Username = userDto.Username;
-            user.Password = userDto.Password;
-            user.Role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Role1");
+        {
+            var existedUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
+
+            if (existedUser != null)
+            {
+                return Unauthorized();
+            }
+            
+            User user = new User
+            {
+                Username = userDto.Username,
+                Password = userDto.Password,
+                Role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Role1")
+            };
+            
             user.Role.RolePermissions = await _context.RolePermissions
                 .Select(p => p)
                 .Where(rp => rp.RoleId == user.RoleId).ToListAsync();
