@@ -8,4 +8,9 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Auth.Data\Auth.Data.csproj" />
+      <ProjectReference Include="..\Infrastructure.Data\Infrastructure.Data.csproj" />
+    </ItemGroup>
+
 </Project>

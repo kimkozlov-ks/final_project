@@ -19,11 +19,21 @@ namespace Map.API.Services
             _mapper = mapper;
         }
 
-        public async Task AddRoute(RouteDto routeDto)
+        public async Task AddRoute(RouteDto routeDto, string userId)
         {
             var route = _mapper.Map<Route>(routeDto);
 
-            var res = await _mapDbContext.Routes.AddAsync(route);
+            await _mapDbContext.Routes.AddAsync(route);
+
+            if (int.TryParse(userId, out int id))
+            {
+                await _mapDbContext.UserRoutes.AddAsync(new UserRoute()
+                {
+                    RouteId = routeDto.Id,
+                    UserId = id
+                });
+            }
+            
             await _mapDbContext.SaveChangesAsync();
         }
 
