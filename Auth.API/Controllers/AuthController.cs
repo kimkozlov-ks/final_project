@@ -175,14 +175,15 @@ namespace Auth.API.Controllers
             var audience = _configuration["Audience"] ?? throw new ArgumentException();
 
             var subject = new ClaimsIdentity(new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.Role.Name)
-                    
-                }.Concat(user.Role.RolePermissions
-                     .Select(p => 
-                         new Claim("Permission", ((int)p.PermissionType).ToString()))));
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.Name)
+
+            });
+                // .Concat(user.Role.RolePermissions
+                //      .Select(p => 
+                //          new Claim("Permission", ((int)p.PermissionType).ToString()))));
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_configuration["JwtTokenSecret"])),
