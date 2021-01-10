@@ -17,6 +17,7 @@ import { MenuComponent } from './map/components/menu/menu.component';
 import { MenuItemComponent } from './map/components/menu/menu-item/menu-item.component';
 import { RegisterComponent } from './auth/components/register/register.component';
 import { NotFoundComponent } from './components/error/not-found/not-found.component';
+import { MapWrapperComponent } from './map/components/map-wrapper/map-wrapper.component';
 
 const appRoutes: Routes=[
   {path: '', component: LoginComponent},
@@ -25,7 +26,7 @@ const appRoutes: Routes=[
   {path: 'register', component: RegisterComponent},
   {
     path: 'map',
-    component: MapComponent,
+    component: MapWrapperComponent,
     canActivate:[AccessGuard],
     data: { requiredPermissions: [] }
   },
@@ -42,6 +43,7 @@ const appRoutes: Routes=[
     MenuItemComponent,
     RegisterComponent,
     NotFoundComponent,
+    MapWrapperComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import * as L from 'leaflet'; import 'leaflet-routing-machine';
 import {MapDispatcherService} from "../../services/map-dispatcher.service";
 import {MapAction} from "../../enums/MapAction";
 import {RouteService} from "../../services/route.service";
+import {tap} from "rxjs/operators";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -32,29 +33,26 @@ export class MapComponent implements AfterViewInit {
 
   constructor(private mapDispatcherService: MapDispatcherService,
               private routeService: RouteService) {
+    this.mapDispatcherService.$mapAction
+      .pipe(tap(this.onActionChanged.bind(this)))
+      .subscribe()
   }
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.route = L.Routing.control({
-      waypoints: this.waypoints,
-      show: true
-    });
   }
 
   onMapClick(e) {
-    switch (this.mapDispatcherService.mapAction)
-    {
+    switch (this.mapDispatcherService.$mapAction.getValue()){
       case MapAction.ADD_ROUTE_POINT:
         this.waypoints.push(e.latlng);
         this.route.setWaypoints(this.waypoints);
-        this.route.addTo(this.map);
 
         if(this.waypoints.length > 1){
-        this.routeService.updateRoute(this.route);
+          this.routeService.updateRoute(this.route);
         }
         break;
-      case MapAction.EDIT_ROUTE:
+      case MapAction.LIST_OF_ROUTES:
         break;
       case MapAction.NONE:
         break;
@@ -79,5 +77,27 @@ export class MapComponent implements AfterViewInit {
     this.map.on('click', this.onMapClick.bind(this));
 
     tiles.addTo(this.map);
+  }
+
+  onActionChanged(){
+    switch (this.mapDispatcherService.$mapAction.getValue()){
+      case MapAction.ADD_ROUTE_POINT:
+        this.waypoints = [];
+        this.route = L.Routing.control({
+          waypoints: this.waypoints,
+          show: true
+        });
+        this.route.addTo(this.map);
+        break;
+      case MapAction.LIST_OF_ROUTES:
+        break;
+      case MapAction.SAVE_ROUTE:
+        break;
+      case MapAction.ROUTE_SAVED:
+        this.routeService.saveRoute();
+        break;
+      case MapAction.NONE:
+        break;
+    }
   }
 }

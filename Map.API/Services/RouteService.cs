@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,17 +24,17 @@ namespace Map.API.Services
         {
             var route = _mapper.Map<Route>(routeDto);
 
-            await _mapDbContext.Routes.AddAsync(route);
-
+            var savedRoute = await _mapDbContext.Routes.AddAsync(route);
+            await _mapDbContext.SaveChangesAsync();
+            
             if (int.TryParse(userId, out int id))
             {
                 await _mapDbContext.UserRoutes.AddAsync(new UserRoute()
                 {
-                    RouteId = routeDto.Id,
+                    RouteId = savedRoute.Entity.Id,
                     UserId = id
                 });
             }
-            
             await _mapDbContext.SaveChangesAsync();
         }
 

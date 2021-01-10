@@ -25,20 +25,20 @@ export class MenuComponent implements OnInit {
   }
 
   menuItemClicked(i: number) {
+    this.mapDispatcherService.$mapAction.next(i);
 
-    if(this.mapDispatcherService.mapAction == MapAction.ADD_ROUTE_POINT &&
-      this.menuItems.length - 1 != MapAction.SAVE_ROUTE){
+    if(this.mapDispatcherService.$mapAction.getValue() == MapAction.ADD_ROUTE_POINT &&
+     this.menuItems[this.menuItems.length -1].name != "Save Route"){
       this.menuItems.push(new MenuItemComponent("Save Route"));
     }
 
-    this.mapDispatcherService.mapAction = i;
-
-    if( this.mapDispatcherService.mapAction == MapAction.SAVE_ROUTE) {
+    if( this.mapDispatcherService.$mapAction.getValue() == MapAction.SAVE_ROUTE) {
       this.mapApiService.saveRoute().pipe(tap(this.onSavingRouteComplete.bind(this))).subscribe();
     }
   }
 
   private onSavingRouteComplete() {
     this.menuItems.pop();
+    this.mapDispatcherService.$mapAction.next(MapAction.ROUTE_SAVED);
   }
 }
