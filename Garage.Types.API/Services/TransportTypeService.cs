@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Garage.Types.API.Dto;
 using Garage.Types.API.Repositories;
+using Garage.Types.Data.Model;
 
 namespace Garage.Types.API.Services
 {
@@ -18,13 +19,11 @@ namespace Garage.Types.API.Services
             _mapper = mapper;
         }
 
-        async Task<List<TransportTypeDto>> GetTransportTypes()
+        public async Task<List<TransportType>> GetTransportTypes()
         {
             var transportTypes = await _transportTypeRepository.GetAll();
-
-            var transportTypesDtos = transportTypes.Select(t => _mapper.Map<TransportTypeDto>(t)).ToList();
             
-            return transportTypesDtos;
+            return transportTypes;
         }
     }
 }

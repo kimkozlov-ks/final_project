@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Garage.Types.API.Services;
 using Garage.Types.Data.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,19 +8,24 @@ namespace Garage.Types.API.Controllers
 {
     public class TransportTypeController : Controller
     {
+        private readonly TransportTypeService _transportTypeService;
+
+        public TransportTypeController(TransportTypeService transportTypeService)
+        {
+            _transportTypeService = transportTypeService;
+        }
+
         [HttpGet]
-        public IActionResult<IEnumerable<TransportType>> GetTransportTypes()
+        public async Task<ActionResult<IEnumerable<TransportType>>> GetTransportTypes()
         {
-            
-            
-            return ;
+            return await _transportTypeService.GetTransportTypes();
         }
 
-        [HttpPost]
-        public IActionResult AddTransportType()
-        {
-
-            return;
-        }
+        // [HttpPost]
+        // public IActionResult AddTransportType()
+        // {
+        //
+        //     return;
+        // }
     }
 }
