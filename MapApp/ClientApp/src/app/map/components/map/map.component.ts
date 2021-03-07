@@ -51,6 +51,8 @@ export class MapComponent implements AfterViewInit {
         if(this.waypoints.length > 1){
           this.routeService.updateRoute(this.route);
         }
+
+        console.log(this.route);
         break;
       case MapAction.LIST_OF_ROUTES:
         break;

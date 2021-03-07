@@ -18,12 +18,14 @@ import { MenuItemComponent } from './map/components/menu/menu-item/menu-item.com
 import { RegisterComponent } from './auth/components/register/register.component';
 import { NotFoundComponent } from './components/error/not-found/not-found.component';
 import { MapWrapperComponent } from './map/components/map-wrapper/map-wrapper.component';
+import { AuthStatisticComponent } from './statistic/auth-statistic/auth-statistic.component';
 
 const appRoutes: Routes=[
   {path: '', component: LoginComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'statistic', component: AuthStatisticComponent},
   {
     path: 'map',
     component: MapWrapperComponent,
@@ -44,6 +46,7 @@ const appRoutes: Routes=[
     RegisterComponent,
     NotFoundComponent,
     MapWrapperComponent,
+    AuthStatisticComponent,
   ],
   imports: [
     BrowserModule,

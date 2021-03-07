@@ -26,6 +26,7 @@
     <ItemGroup>
       <Folder Include="ClientApp\src\app\auth\components" />
       <Folder Include="ClientApp\src\app\interceptors" />
+      <Folder Include="ClientApp\src\app\statistic" />
       <Folder Include="Controllers" />
     </ItemGroup>
 
