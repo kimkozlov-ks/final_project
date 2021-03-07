@@ -1,0 +1,33 @@
+<form>
+  <span class="form-group">
+    <label for="UsedId">UsedId</label>
+    <input type="number" class="form-control" id="UsedId" placeholder="Enter UsedId" [(ngModel)]="userId"[ngModelOptions]="{standalone: true}">
+  </span>
+  <span class="form-group">
+    <label for="Action">Action</label>
+    <input type="text" class="form-control" id="Action" placeholder="Enter Action" [(ngModel)]="action"[ngModelOptions]="{standalone: true}">
+  </span>
+  <span class="form-group">
+    <label for="Ip">Ip</label>
+    <input type="text" class="form-control" id="Ip" placeholder="Enter Ip" [(ngModel)]="ip"[ngModelOptions]="{standalone: true}">
+  </span>
+  <span class="form-group">
+    <label for="DateTo">Date To</label>
+    <input type="text" class="form-control" id="DateTo" placeholder="Enter DateTo" [(ngModel)]="dateTo" [ngModelOptions]="{standalone: true}">
+  </span>
+  <span class="form-group">
+    <label for="dateFrom">Date From</label>
+    <input type="text" class="form-control" id="DateFrom" placeholder="Enter DateFrom" [(ngModel)]="dateFrom" [ngModelOptions]="{standalone: true}">
+  </span>
+  <button type="submit" class="btn btn-primary m-1" (click)="onSearch($event)">Search</button>
+  <button type="reset" class="btn btn-warning m-1" (click)="onReset($event)">Reset</button>
+  <button type="button" class="btn btn-secondary m-1" (click)="onRefresh($event)">Refresh </button>
+</form>
+<div id="table_div"></div>
+<div>
+  <span (click)="onPageNumberClick($event)" class="pagination" *ngFor="let item of pagination">{{item}}</span>
+</div>
+<span (click)="onPaginationButtonClicked(-1)" class="previous">&laquo; Previous</span>
+<span (click)="onPaginationButtonClicked(1)" class="next">Next &raquo;</span>
+<span (click)="goEnd()" class="next">Go to end &raquo;&raquo;&raquo;</span>
+

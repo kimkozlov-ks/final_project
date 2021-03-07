@@ -1,0 +1,24 @@
+<form>
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input #spy type="text" id="username" class="form-control" [(ngModel)]="username" minlength="8" required name="username"/>
+    {{spy.className }}
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" class="form-control" [(ngModel)]="password" minlength="8" required name="password"/>
+  </div>
+  <div class="form-group">
+    <label for="repeat_password">Password:</label>
+    <input type="password" id="repeat_password" class="form-control" [(ngModel)]="repeatedPassword" minlength="8" required name="repeatedPassword"/>
+  </div>
+  <div class="text-danger" *ngIf="isFailed">
+    <small>{{errorMsg}}</small>
+  </div>
+  <div >
+    <input type="button" class="btn-link" (click)="toLogin()" value="To Login"/>
+  </div>
+  <div>
+    <input type="submit" name="Register" class="btn btn-primary" (click)="register()" value="Register"/>
+  </div>
+</form>

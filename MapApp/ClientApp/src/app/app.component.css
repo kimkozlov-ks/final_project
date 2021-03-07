@@ -1,0 +1,10 @@
+.routerLink{
+  font-size: 2rem;
+  border: #8d96a0 solid 2px;
+  border-radius: 5px;
+  margin-left: 15px;
+}
+
+.nav{
+  border: cadetblue solid 4px;
+}

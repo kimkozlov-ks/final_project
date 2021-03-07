@@ -1,0 +1,7 @@
+export enum MapAction{
+  ADD_ROUTE_POINT,
+  LIST_OF_ROUTES,
+  SAVE_ROUTE,
+  ROUTE_SAVED,
+  NONE
+}
