@@ -5,7 +5,9 @@ using Garage.Types.Data.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Garage.Types.API.Controllers
-{
+{    
+    [ApiController]
+    [Route("api/[controller]")]
     public class TransportTypeController : Controller
     {
         private readonly TransportTypeService _transportTypeService;

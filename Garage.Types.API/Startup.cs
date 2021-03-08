@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Garage.Types.API.Mapper;
+using Garage.Types.API.Repositories;
+using Garage.Types.API.Services;
 using Garage.Types.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -62,6 +64,8 @@ namespace Garage.Types.API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtTokenSecret"]))
                     };
                 });
+            services.AddTransient<TransportTypeService>();
+            services.AddTransient<TransportTypeRepository>();
             
             var mapperConfig = new MapperConfiguration(mc =>
             {
