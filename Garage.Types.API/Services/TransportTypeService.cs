@@ -25,5 +25,12 @@ namespace Garage.Types.API.Services
             
             return transportTypes;
         }
+
+        public async Task AddTransportType(TransportTypeAddDto transportTypeAddDto)
+        {
+            var transportType = _mapper.Map<TransportType>(transportTypeAddDto);
+
+            await _transportTypeRepository.Add(transportType);
+        }
     }
 }

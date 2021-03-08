@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Garage.Types.API.Dto;
 using Garage.Types.API.Services;
 using Garage.Types.Data.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,14 @@ namespace Garage.Types.API.Controllers
             return await _transportTypeService.GetTransportTypes();
         }
 
-        // [HttpPost]
-        // public IActionResult AddTransportType()
-        // {
-        //
-        //     return;
-        // }
+        [HttpPost("add")] 
+        public async Task<IActionResult> AddTransportType([FromBody] TransportTypeAddDto transportTypeAddDto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            await _transportTypeService.AddTransportType(transportTypeAddDto);
+            
+            return Ok();
+        }
     }
 }
