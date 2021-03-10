@@ -21,6 +21,7 @@ namespace Garage.Types.API.Mapper
                 .ForMember(dest => dest.TransportBrandId,
                     opt => opt
                         .MapFrom(src =>src.BrandId));
+            CreateMap<TransportBrand, TransportBrandDto>();
             
         }
     }
