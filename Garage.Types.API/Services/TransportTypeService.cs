@@ -11,12 +11,14 @@ namespace Garage.Types.API.Services
     public class TransportTypeService
     {
         private readonly TransportTypeRepository _transportTypeRepository;
+        private readonly TransportSubTypeRepository _transportSubTypeRepository;
         private readonly IMapper _mapper;
 
-        public TransportTypeService(TransportTypeRepository transportTypeRepository, IMapper mapper)
+        public TransportTypeService(TransportTypeRepository transportTypeRepository, IMapper mapper, TransportSubTypeRepository transportSubTypeRepository)
         {
             _transportTypeRepository = transportTypeRepository;
             _mapper = mapper;
+            _transportSubTypeRepository = transportSubTypeRepository;
         }
 
         public async Task<List<TransportType>> GetTransportTypes()
@@ -31,6 +33,13 @@ namespace Garage.Types.API.Services
             var transportType = _mapper.Map<TransportType>(transportTypeAddDto);
 
             await _transportTypeRepository.Add(transportType);
+        }
+
+        public async Task AddTransportSubType(TransportSubTypeAddDto transportSubTypeAddDto)
+        {
+            var transportSubType = _mapper.Map<TransportSubType>(transportSubTypeAddDto);
+            
+            await _transportSubTypeRepository.Add(transportSubType);
         }
     }
 }
