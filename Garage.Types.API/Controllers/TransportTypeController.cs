@@ -19,7 +19,7 @@ namespace Garage.Types.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TransportType>>> GetTransportTypes()
+        public async Task<ActionResult<IEnumerable<TransportTypeDto>>> GetTransportTypes()
         {
             return await _transportTypeService.GetTransportTypes();
         }
@@ -32,6 +32,12 @@ namespace Garage.Types.API.Controllers
             await _transportTypeService.AddTransportType(transportTypeAddDto);
             
             return Ok();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<TransportSubTypeDto>>> GetTransportSubTypesByTypeId([FromRoute] int id)
+        {
+            return await _transportTypeService.GetTransportSubTypesByTypeId(id);
         }
         
         [HttpPost("subtype/add")] 

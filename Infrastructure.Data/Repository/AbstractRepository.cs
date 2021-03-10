@@ -52,5 +52,9 @@ namespace Infrastructure.Data.Repository
             return entity;
         }
 
+        protected TContext GetDbContext()
+        {
+            return _context;
+        }
     }
 }

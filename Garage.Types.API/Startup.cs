@@ -67,6 +67,10 @@ namespace Garage.Types.API
             services.AddTransient<TransportTypeService>();
             services.AddTransient<TransportTypeRepository>();
             services.AddTransient<TransportSubTypeRepository>();
+            services.AddTransient<TransportBrandService>();
+            services.AddTransient<TransportBrandRepository>();
+            services.AddTransient<TransportModelRepository>();
+            services.AddTransient<TransportModelService>();
             
             var mapperConfig = new MapperConfiguration(mc =>
             {
