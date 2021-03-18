@@ -3,7 +3,7 @@ import {PureComponent} from "react";
 import {connect} from "react-redux";
 import * as AuthStore from "../store/AuthStore";
 import {ApplicationState} from "../store";
-import {RouteComponentProps} from "react-router";
+import {Redirect, RouteComponentProps} from "react-router";
 import * as CounterStore from '../store/Counter';
 
 type LoginFormProps =
@@ -27,6 +27,7 @@ class LoginForm extends PureComponent<LoginFormProps, IState>{
 
         this.onUsernameChange = this.onUsernameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
     
     onUsernameChange(e: any) {
@@ -39,12 +40,19 @@ class LoginForm extends PureComponent<LoginFormProps, IState>{
         this.setState({password: val});
     }
     
+    onSubmit(event: any){
+        event.preventDefault();
+        this.props.login(this.state.name, this.state.password);
+    }
+    
     public render() {
+        console.log(this.props);
+        if(this.props.loggedIn) return (<Redirect to={"/counter"}/>)
         return (
-            <form onSubmit={(event) => {
-                event.preventDefault();
-                this.props.login(this.state.name, this.state.password);
-            }}>
+            <form onSubmit={this.onSubmit}>
+                <div>
+                    <label>{this.props.errorMessage}</label>
+                </div>
                 <p>
                     <label>Username:</label><br />
                     <input type="text" value={this.state.name} onChange={this.onUsernameChange} minLength={8} maxLength={255}/>
@@ -54,11 +62,6 @@ class LoginForm extends PureComponent<LoginFormProps, IState>{
                     <input type="password" value={this.state.password} onChange={this.onPasswordChange} minLength={8} maxLength={255}/>
                 </p>
                 <input type="submit" value="Login" />
-                <label>
-                    <p>
-                        {this.props.userInfo.username}
-                    </p>
-                    </label>
             </form>
         );
     }
@@ -66,11 +69,10 @@ class LoginForm extends PureComponent<LoginFormProps, IState>{
 
 export default connect(
      (state: ApplicationState) => {
-         console.log(state);
          return { 
-             isLoggedIn: state.authStore.loggedIn,
-             userInfo: state.authStore.userInfo
-         };
+             loggedIn: state.authStore.loggedIn,
+             userInfo: state.authStore.userInfo,
+             errorMessage: state.authStore.errorMessage }
          },
     AuthStore.actionCreators
 )(LoginForm as any);

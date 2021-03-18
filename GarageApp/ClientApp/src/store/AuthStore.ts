@@ -6,16 +6,19 @@ import {decodeToken, isExpired} from "react-jwt";
 export interface AuthState{
     loggedIn: boolean;
     userInfo: UserInfo;
+    errorMessage: string;
 }
 
 export interface LoginAction { type: 'LOGIN', user: UserInfo }
+export interface LoginFailAction { type: 'LOGIN_FAIL', errorMessage: string }
 export interface LogoutAction { type: 'LOGOUT' }
 
-export type KnownAction = LoginAction | LogoutAction;
+export type KnownAction = LoginAction | LogoutAction | LoginFailAction;
 
 const emptyState: AuthState = { 
     loggedIn: false,  
-    userInfo: new UserInfo(null)
+    userInfo: new UserInfo(null),
+    errorMessage: ''
 };
 
 const baseUrl = 'https://localhost:5001/api/auth/'
@@ -24,7 +27,7 @@ export const actionCreators = {
     login: (username: string, password: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         console.log("!!!");
         try {
-            let url = baseUrl + 'login';
+            const url = baseUrl + 'login';
             const res = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -33,14 +36,18 @@ export const actionCreators = {
                 },
                 body: JSON.stringify({username, password})
             }) ;
+            
+            if(res.status != 200)
+            {
+                return dispatch({type: 'LOGIN_FAIL', errorMessage: 'Incorrect input'} as LoginFailAction);
+            }
+            
             const  data  = await res.json()
-            console.log(data);
             const decodedToken = decodeToken(data.value);
-            console.log(decodedToken);        
             return dispatch({type: 'LOGIN', user: decodedToken} as LoginAction);
 
         } catch (err) {
-            console.log(err)
+            return dispatch({type: 'LOGIN_FAIL', errorMessage: 'Incorrect input'} as LoginFailAction);
         }
     },
     logout: () => ({ type: 'LOGOUT' } as LogoutAction)
@@ -55,6 +62,12 @@ export const reducer: Reducer<AuthState> = (state: AuthState = emptyState, incom
                 ...state,
                 loggedIn: true,
                 userInfo: new UserInfo(action.user)
+            };
+        case 'LOGIN_FAIL':
+            return {
+                ...state,
+                loggedIn: false,
+                errorMessage: action.errorMessage
             };
         case 'LOGOUT':
             return state;
