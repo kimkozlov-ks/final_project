@@ -28,8 +28,8 @@ class NavMenu extends React.PureComponent<Props, { isOpen: boolean }> {
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-                                </NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/adminArea">AdminArea</NavLink>
+                                </NavItem> 
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                                 </NavItem>

@@ -8,13 +8,14 @@ import FetchData from './components/FetchData';
 import './custom.css'
 import LoginForm from "./components/LoginForm";
 import Logout from "./components/auth/Logout";
+import AdminArea from "./components/admin/AdminArea";
 
 export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
+        <Route path='/adminArea' component={AdminArea} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
         <Route exact path='/login-form' component={LoginForm} />
-        <Route exact path='/login-form' component={Logout} />
+        <Route exact path='/logout' component={Logout} />
     </Layout>
 );
