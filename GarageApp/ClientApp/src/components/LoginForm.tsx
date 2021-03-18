@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import * as AuthStore from "../store/AuthStore";
 import {ApplicationState} from "../store";
 import {Redirect, RouteComponentProps} from "react-router";
-import * as CounterStore from '../store/Counter';
 
 type LoginFormProps =
     AuthStore.AuthState &
@@ -46,8 +45,7 @@ class LoginForm extends PureComponent<LoginFormProps, IState>{
     }
     
     public render() {
-        console.log(this.props);
-        if(this.props.loggedIn) return (<Redirect to={"/counter"}/>)
+        if(this.props.loggedIn) return (<Redirect to={"/"}/>)
         return (
             <form onSubmit={this.onSubmit}>
                 <div>

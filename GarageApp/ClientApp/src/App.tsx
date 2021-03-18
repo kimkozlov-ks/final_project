@@ -7,6 +7,7 @@ import FetchData from './components/FetchData';
 
 import './custom.css'
 import LoginForm from "./components/LoginForm";
+import Logout from "./components/auth/Logout";
 
 export default () => (
     <Layout>
@@ -14,5 +15,6 @@ export default () => (
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
         <Route exact path='/login-form' component={LoginForm} />
+        <Route exact path='/login-form' component={Logout} />
     </Layout>
 );

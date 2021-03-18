@@ -2,6 +2,7 @@ import { Action, Reducer} from "redux";
 import UserInfo from "./UserInfo";
 import {AppThunkAction} from "./index";
 import {decodeToken, isExpired} from "react-jwt";
+import Logout from "../components/auth/Logout";
 
 export interface AuthState{
     loggedIn: boolean;
@@ -12,8 +13,9 @@ export interface AuthState{
 export interface LoginAction { type: 'LOGIN', user: UserInfo }
 export interface LoginFailAction { type: 'LOGIN_FAIL', errorMessage: string }
 export interface LogoutAction { type: 'LOGOUT' }
+export interface LogoutFailAction { type: 'LOGOUT_FAIL', errorMessage: string }
 
-export type KnownAction = LoginAction | LogoutAction | LoginFailAction;
+export type KnownAction = LoginAction | LogoutAction | LoginFailAction | LogoutFailAction;
 
 const emptyState: AuthState = { 
     loggedIn: false,  
@@ -42,15 +44,32 @@ export const actionCreators = {
                 return dispatch({type: 'LOGIN_FAIL', errorMessage: 'Incorrect input'} as LoginFailAction);
             }
             
-            const  data  = await res.json()
+            const  data  = await res.json();
             const decodedToken = decodeToken(data.value);
+            localStorage.setItem('accessToken', data.value);
             return dispatch({type: 'LOGIN', user: decodedToken} as LoginAction);
 
         } catch (err) {
             return dispatch({type: 'LOGIN_FAIL', errorMessage: 'Incorrect input'} as LoginFailAction);
         }
     },
-    logout: () => ({ type: 'LOGOUT' } as LogoutAction)
+    logout: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        try {
+            const url = baseUrl + 'logout';
+            const res = await fetch(url, {
+                method: 'GET',
+            }) ;
+
+            if(res.status != 200)
+            {
+                return dispatch({type: 'LOGOUT_FAIL', errorMessage: 'Logout failed'} as LogoutFailAction);
+            }
+            localStorage.removeItem('accessToken');
+            return dispatch({type: 'LOGOUT'} as LogoutAction);
+        } catch (err) {
+            return dispatch({type: 'LOGOUT_FAIL', errorMessage: 'Exception'} as LogoutFailAction);
+        }
+    }
 };
 
 export const reducer: Reducer<AuthState> = (state: AuthState = emptyState, incomingAction: Action): AuthState => {
@@ -66,11 +85,20 @@ export const reducer: Reducer<AuthState> = (state: AuthState = emptyState, incom
         case 'LOGIN_FAIL':
             return {
                 ...state,
-                loggedIn: false,
                 errorMessage: action.errorMessage
             };
         case 'LOGOUT':
-            return state;
+            return {
+                ...state,
+                loggedIn: false,
+                userInfo: emptyState.userInfo,
+                errorMessage: ''
+            };
+        case 'LOGOUT_FAIL':
+            return {
+                ...state,
+                errorMessage: action.errorMessage
+            };
         default:
             return state;
     }

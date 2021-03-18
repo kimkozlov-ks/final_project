@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Link, RouteComponentProps} from 'react-router-dom';
 import './NavMenu.css';
+import {connect} from "react-redux";
+import {ApplicationState} from "../../store";
+import * as AuthStore from "../../store/AuthStore";
 
-export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
+type Props =
+    AuthStore.AuthState &
+    RouteComponentProps<{}>;
+
+class NavMenu extends React.PureComponent<Props, { isOpen: boolean }> {
     public state = {
         isOpen: false
     };
@@ -26,9 +33,17 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/login-form">Login</NavLink>
-                                </NavItem>
+                                {
+                                    !this.props.loggedIn 
+                                        ?  
+                                            <NavItem>
+                                                <NavLink tag={Link} className="text-dark" to={'/login-form'}>Login</NavLink>
+                                            </NavItem>
+                                        :  
+                                            <NavItem>
+                                                <NavLink tag={Link} className="text-dark" to={'/logout'}>Logout</NavLink>
+                                            </NavItem>
+                                }
                             </ul>
                         </Collapse>
                     </Container>
@@ -43,3 +58,12 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
         });
     }
 }
+
+export default connect(
+    (state: ApplicationState) => {
+        return {
+            loggedIn: state.authStore.loggedIn,
+            userInfo: state.authStore.userInfo,
+            errorMessage: state.authStore.errorMessage }
+    }
+)(NavMenu as any);

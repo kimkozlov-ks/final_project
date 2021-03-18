@@ -116,8 +116,8 @@ namespace Auth.API.Controllers
             return Ok(new ResponseAccessToken(accessToken));
         }
 
-        [HttpPost("logout")]
-        public ActionResult Logout([FromBody] UserDto model)
+        [HttpGet("logout")]
+        public ActionResult Logout()
         {
             var refreshTokenStr = Request.Cookies["Refresh"];
             if(Guid.TryParse(refreshTokenStr, out var refreshToken))
