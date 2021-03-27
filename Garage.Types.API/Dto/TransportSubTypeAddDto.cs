@@ -4,5 +4,6 @@ namespace Garage.Types.API.Dto
     {
         public string Name { get; set; }
         public int TransportTypeId { get; set; }
+        public string IdAsStr => TransportTypeId.ToString();
     }
 }

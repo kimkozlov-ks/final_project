@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {connect} from "react-redux";
-import {ApplicationState} from "../../store";
-import * as AuthStore from "../../store/AuthStore";
+import {ApplicationState} from "../store";
+import * as AuthStore from "../auth/AuthStore";
 import {compose} from "redux";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {withAuthRedirect} from "../hoc/withAuthRedirect";
 
 type LogoutProps =
     AuthStore.AuthState &

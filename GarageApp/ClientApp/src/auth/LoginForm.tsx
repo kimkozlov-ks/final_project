@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {PureComponent} from "react";
 import {connect} from "react-redux";
-import * as AuthStore from "../store/AuthStore";
+import * as AuthStore from "./AuthStore";
 import {ApplicationState} from "../store";
 import {Redirect, RouteComponentProps} from "react-router";
 

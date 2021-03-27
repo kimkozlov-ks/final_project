@@ -4,7 +4,7 @@ import {Link, RouteComponentProps} from 'react-router-dom';
 import './NavMenu.css';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
-import * as AuthStore from "../../store/AuthStore";
+import * as AuthStore from "../../auth/AuthStore";
 
 type Props =
     AuthStore.AuthState &

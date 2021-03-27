@@ -6,8 +6,8 @@ import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 
 import './custom.css'
-import LoginForm from "./components/LoginForm";
-import Logout from "./components/auth/Logout";
+import LoginForm from "./auth/LoginForm";
+import Logout from "./auth/Logout";
 import AdminArea from "./components/admin/AdminArea";
 
 export default () => (

@@ -3,7 +3,7 @@ import {Component, ComponentProps} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../store";
 import {Redirect} from "react-router";
-import * as AuthStore from "../store/AuthStore";
+import * as AuthStore from "../auth/AuthStore";
 
 type AuthRedirectProps =
     AuthStore.AuthState;
