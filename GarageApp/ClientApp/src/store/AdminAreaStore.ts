@@ -10,6 +10,7 @@ export interface Type{
 }
 
 export interface SubType{
+    id: number;
     name: string;
 }
 
@@ -21,9 +22,10 @@ export interface GetVehicleTypesAction { type: 'GET_TYPES', types: Type[]}
 export interface GetVehicleSubTypesAction { type: 'GET_SUB_TYPES', subtypes: SubType[], vehicleTypeId: number}
 export interface GetVehicleBrandsAction { type: 'GET_BRANDES'}
 export interface GetVehicleModelAction { type: 'GET_MODEL'}
+export interface AddSubTypeAction { type: 'ADD_SUB_TYPE', subtype: SubType, typeId: number}
 export interface FailAction { type: 'FAIL'}
 
-export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction;
+export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction;
 
 
 const emptyState: AdminAreaState = {
@@ -79,10 +81,8 @@ export const actionCreators = {
             headers );
         
         console.log(result);
-        let subtypes: SubType[] = result.body;
-
         return result.success
-            ? dispatch({type: 'GET_SUB_TYPES', subtypes: subtypes, vehicleTypeId: vehicleTypeId} as GetVehicleSubTypesAction)
+            ? dispatch({type: 'ADD_SUB_TYPE', subtype: {name}, typeId: vehicleTypeId} as AddSubTypeAction)
             : dispatch({type: 'FAIL'} as FailAction);
     },
 };
@@ -97,13 +97,20 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
                 vehicleType: [...state.vehicleType, ...action.types],
             };
         case 'GET_SUB_TYPES':
-            console.log(action.subtypes);
             return {
                 ...state,
                 vehicleType:  state.vehicleType.map(
                     (type) => type.id === action.vehicleTypeId ? {...type, subTypes: action.subtypes}
                         : type)
             };
+        case 'ADD_SUB_TYPE':
+            console.log(state);
+            return {
+                ...state,
+                vehicleType: state.vehicleType.map(
+                    (type) => type.id === action.typeId ? {...type, subTypes: [...type.subTypes, action.subtype]}
+                        : type)
+            }
         default:
             return state;
     }

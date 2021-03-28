@@ -35,13 +35,12 @@ export async function post(url: string, body: string, headers: any) {
         
         if(res.status != 200)
         {
-            return {success: false, err: "Incorrect input" }
+            return {success: false, err: `Status code ${res.status}`};
         }
 
-        const data = await res.json();
-        return {success: true, body: data.value };
+        return {success: true };
 
     } catch (err) {
-        return {success: false, err: "Login failed! Exception: " + err };
+        return {success: false, err: "Exception: " + err };
     }
 }

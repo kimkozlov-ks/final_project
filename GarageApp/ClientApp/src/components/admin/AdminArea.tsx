@@ -6,6 +6,8 @@ import {connect} from "react-redux";
 import * as AdminAreaStore from "../../store/AdminAreaStore";
 import {Type} from "../../store/AdminAreaStore";
 import {useRef, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit} from "@fortawesome/free-solid-svg-icons";
 
 type AdminAreaProps =
     AdminAreaStore.AdminAreaState &
@@ -20,15 +22,29 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
         adminAreaProps.getTypes();
     }
     
-    function onClickType(id: number) {
+    function onClickType(event: React.MouseEvent, id: number) {
+       
         adminAreaProps.getSubType(id);
     }
     
-    function getDropdown(type: Type)
+    function renderSubtypes(type: Type)
     {   
         if(type.subTypes === undefined) return;
 
-        return <select>{type.subTypes.map((subtype, index) => <option key={index}>{subtype.name}</option>)}</select>;
+        function onEditClick(id: number) {
+            console.log("onEditClick" + id);
+            return function (p1: React.MouseEvent<SVGSVGElement>) {};
+        }
+
+        return (
+            <ul>
+                {type.subTypes.map((subtype, index) => 
+                    <li key={subtype.id}>
+                    {subtype.name}
+                    <FontAwesomeIcon icon={faEdit} onClick={() => onEditClick( subtype.id)}/>
+                </li> )}
+            </ul>
+        );
     }
 
     function addSubType(id: number, index: number) {
@@ -53,10 +69,10 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
             <ul>
                 {
                     adminAreaProps.vehicleType.map((el, index) => 
-                    <li onClick={() => onClickType(el.id)} >
+                    <li onClick={(event) => onClickType(event, el.id)} >
                         {el.name}
-                        {getDropdown(el)}
-                        <input name={el.name} defaultValue={''} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
+                        {renderSubtypes(el)}
+                        <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
                         />
                         <button onClick={() => addSubType(el.id, index)}>Add</button>
                     </li>)
