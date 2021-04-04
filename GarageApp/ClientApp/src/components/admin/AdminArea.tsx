@@ -15,10 +15,11 @@ type AdminAreaProps =
     typeof AdminAreaStore.actionCreators;
 
 function AdminArea(adminAreaProps: AdminAreaProps) {
-
-    console.log(adminAreaProps.vehicleType);
-
+    
+    adminAreaProps.getTypes();
+    
     const [inputValues, setInput] = useState(['']);
+    const [addTypeInput, setAddTypeInput] = useState('');
     let checked = 'Types';
     
     function onValueChange(event: React.FormEvent<HTMLInputElement>) {
@@ -50,8 +51,7 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
     }
     
     function handleChange(event: React.ChangeEvent<HTMLInputElement>, index: number) {
-        const { name, value } = event.target;
-        console.log(inputValues[index]);
+        const { value } = event.target;
         inputValues[index] = value;
 
         let newArr = [...inputValues]; 
@@ -59,11 +59,9 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
 
         setInput(newArr); 
     }
-
+    
     return (
         <div>
-            <input type="radio" checked={true} onChange={onValueChange}/> Types
-            <input type="radio" onClick={onValueChange}/> Models
             <ul>
                 {
                     adminAreaProps.vehicleType.map((el, index) => 
@@ -73,10 +71,17 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
                         <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
                         />
                         <button onClick={() => addSubType(el.id, index)}>Add</button>
+                      
                     </li>)
                 }
             </ul>
-           
+            
+            <input 
+                name={'AddType'} 
+                placeholder={'new type'}  
+                value={addTypeInput} type='text' onChange={(event) =>         setAddTypeInput(event.target.value)}
+                />
+            <button onClick={() => adminAreaProps.addType(addTypeInput)}>Add</button>
         </div>
     );
 }

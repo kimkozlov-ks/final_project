@@ -48,6 +48,35 @@ export const actionCreators = {
             ? dispatch({type: 'GET_TYPES', types: types} as GetVehicleTypesAction)
             : dispatch({type: 'FAIL'} as FailAction);
     },
+
+    addType: (typeName: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        console.log('Add type is not implemented');
+        // const headers = {
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json'
+        // };
+        //
+        // const body = {
+        //     name: name,
+        //     transportTypeid: vehicleTypeId
+        // };
+        //
+        // const result = await HttpClient.post(
+        //     config.TYPES_BASE_URL + `subtype/add`,
+        //     JSON.stringify(body, (key, value)=>{
+        //         if(key == 'transportTypeid')
+        //         {
+        //             value = parseInt(value);
+        //         }
+        //
+        //         return value;
+        //     }),
+        //     headers );
+        //
+        // return result.success
+        //     ? dispatch({type: 'ADD_TYPE', type: {name}, typeId: vehicleTypeId} as AddTypeAction)
+        //     : dispatch({type: 'FAIL'} as FailAction);
+    },
     
     getSubType: (vehicleTypeId: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         //if(getState().adminArea.vehicleType.length) return;
@@ -60,7 +89,6 @@ export const actionCreators = {
             : dispatch({type: 'FAIL'} as FailAction);
     },
     addSubtype: (vehicleTypeId: number, name: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-        debugger
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
