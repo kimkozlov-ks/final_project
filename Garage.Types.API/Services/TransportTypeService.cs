@@ -52,5 +52,19 @@ namespace Garage.Types.API.Services
             
             return transportSubTypeDtos;
         }
+
+        public async Task EditTransportSubType(TransportSubTypeAddDto transportSubTypeAddDto)
+        {
+            var transportSubType = await _transportSubTypeRepository.Get(transportSubTypeAddDto.Id);
+
+            if (transportSubType == null)
+            {
+                return;
+            }
+
+            transportSubType.Name = transportSubTypeAddDto.Name;
+            
+            await _transportSubTypeRepository.Update(transportSubType);
+        }
     }
 }

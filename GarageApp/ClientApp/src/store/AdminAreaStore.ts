@@ -2,6 +2,7 @@ import {Action, Reducer} from "redux";
 import {AppThunkAction} from "./index";
 import * as HttpClient from "../services/HttpClient"
 import * as config from "../config/urls"
+import {act} from "react-dom/test-utils";
 
 export interface Type{
     id: number
@@ -12,6 +13,7 @@ export interface Type{
 export interface SubType{
     id: number;
     name: string;
+    transportId: number
 }
 
 export interface AdminAreaState{
@@ -23,9 +25,10 @@ export interface GetVehicleSubTypesAction { type: 'GET_SUB_TYPES', subtypes: Sub
 export interface GetVehicleBrandsAction { type: 'GET_BRANDES'}
 export interface GetVehicleModelAction { type: 'GET_MODEL'}
 export interface AddSubTypeAction { type: 'ADD_SUB_TYPE', subtype: SubType, typeId: number}
+export interface EditSubTypeAction { type: 'EDIT_SUB_TYPE', subtype: SubType}
 export interface FailAction { type: 'FAIL'}
 
-export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction;
+export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction | EditSubTypeAction;
 
 
 const emptyState: AdminAreaState = {
@@ -57,7 +60,7 @@ export const actionCreators = {
             : dispatch({type: 'FAIL'} as FailAction);
     },
     addSubtype: (vehicleTypeId: number, name: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-
+        debugger
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -80,11 +83,32 @@ export const actionCreators = {
             }), 
             headers );
         
-        console.log(result);
         return result.success
             ? dispatch({type: 'ADD_SUB_TYPE', subtype: {name}, typeId: vehicleTypeId} as AddSubTypeAction)
             : dispatch({type: 'FAIL'} as FailAction);
     },
+    editSubType: (subType: SubType) : AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+        
+        const result = await HttpClient.put(
+            config.TYPES_BASE_URL + `subtype/edit`,
+            JSON.stringify(subType, (key, value)=>{
+                if(key == 'id')
+                {
+                    value = parseInt(value);
+                }
+
+                return value;
+            }),
+            headers );
+        
+        return result.success
+            ? dispatch({type: 'EDIT_SUB_TYPE', subtype: subType} as EditSubTypeAction)
+            : dispatch({type: 'FAIL'} as FailAction);
+    }
 };
 
 export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptyState, incomingAction: Action): AdminAreaState => {
@@ -99,18 +123,31 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
         case 'GET_SUB_TYPES':
             return {
                 ...state,
-                vehicleType:  state.vehicleType.map(
+                vehicleType: state.vehicleType.map(
                     (type) => type.id === action.vehicleTypeId ? {...type, subTypes: action.subtypes}
                         : type)
             };
         case 'ADD_SUB_TYPE':
-            console.log(state);
             return {
                 ...state,
                 vehicleType: state.vehicleType.map(
                     (type) => type.id === action.typeId ? {...type, subTypes: [...type.subTypes, action.subtype]}
                         : type)
             }
+        case 'EDIT_SUB_TYPE':
+
+            const newState: AdminAreaState = {
+                ...state,
+                vehicleType: state.vehicleType.map(
+                    (type) => type.id === action.subtype.transportId  ? {...type, subTypes: [...type.subTypes]} : type)
+            }
+            
+            const vehicleType = newState.vehicleType.find((type) => type.id == action.subtype.transportId);
+            let subType = vehicleType!.subTypes.find((subtype) => subtype.id === action.subtype.id);
+            subType!.name = action.subtype.name;
+            
+
+            return newState;   
         default:
             return state;
     }

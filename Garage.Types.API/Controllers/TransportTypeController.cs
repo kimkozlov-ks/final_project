@@ -48,7 +48,16 @@ namespace Garage.Types.API.Controllers
             await _transportTypeService.AddTransportSubType(transportSubTypeAddDto);
             
             return Ok();
-        }
+        }    
         
+        [HttpPut("subtype/edit")] 
+        public async Task<IActionResult> EditTransportSubType([FromBody] TransportSubTypeAddDto transportSubTypeAddDto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            await _transportTypeService.EditTransportSubType(transportSubTypeAddDto);
+            
+            return Ok();
+        }
     }
 }

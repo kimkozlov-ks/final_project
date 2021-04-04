@@ -44,3 +44,23 @@ export async function post(url: string, body: string, headers: any) {
         return {success: false, err: "Exception: " + err };
     }
 }
+
+export async function put(url: string, body: string, headers: any) {
+    try {
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: headers,
+            body: body
+        });
+
+        if(res.status != 200)
+        {
+            return {success: false, err: `Status code ${res.status}`};
+        }
+
+        return {success: true };
+
+    } catch (err) {
+        return {success: false, err: "Exception: " + err };
+    }
+}

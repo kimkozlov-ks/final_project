@@ -4,16 +4,19 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {ApplicationState} from "../../store";
 import {connect} from "react-redux";
 import * as AdminAreaStore from "../../store/AdminAreaStore";
-import {Type} from "../../store/AdminAreaStore";
-import {useRef, useState} from "react";
+import {SubType, Type} from "../../store/AdminAreaStore";
+import {ChangeEvent, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit} from "@fortawesome/free-solid-svg-icons";
+import InputWithButton from "../InputWithButton";
 
 type AdminAreaProps =
     AdminAreaStore.AdminAreaState &
     typeof AdminAreaStore.actionCreators;
 
 function AdminArea(adminAreaProps: AdminAreaProps) {
+
+    console.log(adminAreaProps.vehicleType);
 
     const [inputValues, setInput] = useState(['']);
     let checked = 'Types';
@@ -23,25 +26,20 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
     }
     
     function onClickType(event: React.MouseEvent, id: number) {
-       
         adminAreaProps.getSubType(id);
     }
     
     function renderSubtypes(type: Type)
     {   
         if(type.subTypes === undefined) return;
-
-        function onEditClick(id: number) {
-            console.log("onEditClick" + id);
-            return function (p1: React.MouseEvent<SVGSVGElement>) {};
-        }
-
+        
         return (
             <ul>
                 {type.subTypes.map((subtype, index) => 
                     <li key={subtype.id}>
                     {subtype.name}
-                    <FontAwesomeIcon icon={faEdit} onClick={() => onEditClick( subtype.id)}/>
+                    {/*<FontAwesomeIcon icon={faEdit} onClick={() => onEditClick( subtype.id)}/>*/}
+                    <InputWithButton  isVisible={true} key={index} onSave={(newText: string) => adminAreaProps.editSubType({id: subtype.id, name: newText, transportId: subtype.transportId})}/>
                 </li> )}
             </ul>
         );
@@ -69,7 +67,7 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
             <ul>
                 {
                     adminAreaProps.vehicleType.map((el, index) => 
-                    <li onClick={(event) => onClickType(event, el.id)} >
+                    <li key={index} onClick={(event) => onClickType(event, el.id)} >
                         {el.name}
                         {renderSubtypes(el)}
                         <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
