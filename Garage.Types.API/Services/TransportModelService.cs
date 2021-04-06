@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Garage.Types.API.Dto;
@@ -24,6 +25,15 @@ namespace Garage.Types.API.Services
             var transportBrand = _mapper.Map<TransportModel>(transportModelDto);
 
             await _transportModelRepository.Add(transportBrand);
+        }
+
+        public async Task<ActionResult<IEnumerable<TransportModelDto>>> GetTransportModelsByBrand(int id)
+        {
+            var modelsByBrand = await _transportModelRepository.GetModelsByBrandId(id);
+            
+            var modelsByBrandDtos = modelsByBrand.Select(s => _mapper.Map<TransportModelDto>(s)).ToList();
+            
+            return modelsByBrandDtos;
         }
     }
 }

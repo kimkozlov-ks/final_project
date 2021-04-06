@@ -25,13 +25,11 @@ namespace Garage.Types.API.Controllers
         }
 
         [HttpPost("add")] 
-        public async Task<IActionResult> AddTransportType([FromBody] TransportTypeAddDto transportTypeAddDto)
+        public async Task<ActionResult<TransportTypeDto>> AddTransportType([FromBody] TransportTypeAddDto transportTypeAddDto)
         {
             if (!ModelState.IsValid) return BadRequest();
-
-            await _transportTypeService.AddTransportType(transportTypeAddDto);
             
-            return Ok();
+            return Ok(await _transportTypeService.AddTransportType(transportTypeAddDto));
         }
         
         [HttpGet("{id}")]
@@ -41,13 +39,11 @@ namespace Garage.Types.API.Controllers
         }
         
         [HttpPost("subtype/add")] 
-        public async Task<IActionResult> AddTransportSubType([FromBody] TransportSubTypeAddDto transportSubTypeAddDto)
+        public async Task<ActionResult<TransportSubTypeDto>> AddTransportSubType([FromBody] TransportSubTypeAddDto transportSubTypeAddDto)
         {
             if (!ModelState.IsValid) return BadRequest();
-
-            await _transportTypeService.AddTransportSubType(transportSubTypeAddDto);
             
-            return Ok();
+            return  await _transportTypeService.AddTransportSubType(transportSubTypeAddDto);
         }    
         
         [HttpPut("subtype/edit")] 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Garage.Types.API.Dto;
 using Garage.Types.API.Repositories;
@@ -25,6 +26,12 @@ namespace Garage.Types.API.Controllers
             await _transportModelService.AddTransportModel(transportModelDto);
             
             return Ok();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<TransportModelDto>>> GetTransportSubTypesByTypeId([FromRoute] int id)
+        {
+            return await _transportModelService.GetTransportModelsByBrand(id);
         }
     }
 }

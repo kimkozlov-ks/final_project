@@ -1,5 +1,3 @@
-
-
 interface Response {
     success: boolean,
     err?: string,
@@ -25,7 +23,7 @@ export async function get(url: string) : Promise<Response> {
     }
 }
 
-export async function post(url: string, body: string, headers: any) {
+export async function post(url: string, body: string, headers: any) : Promise<Response> {
     try {  
         const res = await fetch(url, {
             method: 'POST',
@@ -38,8 +36,9 @@ export async function post(url: string, body: string, headers: any) {
             return {success: false, err: `Status code ${res.status}`};
         }
 
-        return {success: true };
-
+        const data = await res.json();
+        
+        return {success: true, body: data};
     } catch (err) {
         return {success: false, err: "Exception: " + err };
     }

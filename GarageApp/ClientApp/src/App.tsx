@@ -9,12 +9,13 @@ import './custom.css'
 import LoginForm from "./auth/LoginForm";
 import Logout from "./auth/Logout";
 import AdminArea from "./components/admin/AdminArea";
+import GarageWrapper from "./components/garage/GarageWrapper";
 
 export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
         <Route path='/adminArea' component={AdminArea} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
+        <Route path='/garage' component={GarageWrapper} />
         <Route exact path='/login-form' component={LoginForm} />
         <Route exact path='/logout' component={Logout} />
     </Layout>

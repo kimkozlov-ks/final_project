@@ -17,22 +17,25 @@ export interface SubType{
 }
 
 export interface AdminAreaState{
-    vehicleType: Type[]
+    vehicleType: Type[],
+    errorMessage: string
 }
 
 export interface GetVehicleTypesAction { type: 'GET_TYPES', types: Type[]}
 export interface GetVehicleSubTypesAction { type: 'GET_SUB_TYPES', subtypes: SubType[], vehicleTypeId: number}
 export interface GetVehicleBrandsAction { type: 'GET_BRANDES'}
 export interface GetVehicleModelAction { type: 'GET_MODEL'}
+export interface AddTypeAction { type: 'ADD_TYPE', vehicleType: Type, typeId: number}
 export interface AddSubTypeAction { type: 'ADD_SUB_TYPE', subtype: SubType, typeId: number}
 export interface EditSubTypeAction { type: 'EDIT_SUB_TYPE', subtype: SubType}
-export interface FailAction { type: 'FAIL'}
+export interface FailAction { type: 'FAIL', error: string}
 
-export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction | EditSubTypeAction;
+export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction | EditSubTypeAction | AddTypeAction;
 
 
 const emptyState: AdminAreaState = {
-    vehicleType: new Array<Type>()
+    vehicleType: new Array<Type>(),
+    errorMessage: ''
 };
 
 
@@ -46,36 +49,28 @@ export const actionCreators = {
 
         return result.success
             ? dispatch({type: 'GET_TYPES', types: types} as GetVehicleTypesAction)
-            : dispatch({type: 'FAIL'} as FailAction);
+            : dispatch({type: 'FAIL', error: 'Types are not loaded'} as FailAction);
     },
 
     addType: (typeName: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-        console.log('Add type is not implemented');
-        // const headers = {
-        //     'Accept': 'application/json',
-        //     'Content-Type': 'application/json'
-        // };
-        //
-        // const body = {
-        //     name: name,
-        //     transportTypeid: vehicleTypeId
-        // };
-        //
-        // const result = await HttpClient.post(
-        //     config.TYPES_BASE_URL + `subtype/add`,
-        //     JSON.stringify(body, (key, value)=>{
-        //         if(key == 'transportTypeid')
-        //         {
-        //             value = parseInt(value);
-        //         }
-        //
-        //         return value;
-        //     }),
-        //     headers );
-        //
-        // return result.success
-        //     ? dispatch({type: 'ADD_TYPE', type: {name}, typeId: vehicleTypeId} as AddTypeAction)
-        //     : dispatch({type: 'FAIL'} as FailAction);
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        const body = {
+            name: typeName
+        };
+
+        const result = await HttpClient.post(
+            config.TYPES_BASE_URL + `add`,
+            JSON.stringify(body), 
+            headers );
+
+        return result.success
+            ? dispatch({type: 'ADD_TYPE', vehicleType: result.body} as AddTypeAction)
+            : dispatch({type: 'FAIL', error: 'Type is not added'} as FailAction);
+
     },
     
     getSubType: (vehicleTypeId: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
@@ -86,7 +81,7 @@ export const actionCreators = {
 
         return result.success
             ? dispatch({type: 'GET_SUB_TYPES', subtypes: subtypes, vehicleTypeId: vehicleTypeId} as GetVehicleSubTypesAction)
-            : dispatch({type: 'FAIL'} as FailAction);
+            : dispatch({type: 'FAIL', error: 'Subtypes are not loaded'} as FailAction);
     },
     addSubtype: (vehicleTypeId: number, name: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         const headers = {
@@ -112,8 +107,8 @@ export const actionCreators = {
             headers );
         
         return result.success
-            ? dispatch({type: 'ADD_SUB_TYPE', subtype: {name}, typeId: vehicleTypeId} as AddSubTypeAction)
-            : dispatch({type: 'FAIL'} as FailAction);
+            ? dispatch({type: 'ADD_SUB_TYPE', subtype: result.body, typeId: vehicleTypeId} as AddSubTypeAction)
+            : dispatch({type: 'FAIL', error: 'Subtype is not added'} as FailAction);
     },
     editSubType: (subType: SubType) : AppThunkAction<KnownAction> => async (dispatch, getState) => {
         const headers = {
@@ -135,7 +130,7 @@ export const actionCreators = {
         
         return result.success
             ? dispatch({type: 'EDIT_SUB_TYPE', subtype: subType} as EditSubTypeAction)
-            : dispatch({type: 'FAIL'} as FailAction);
+            : dispatch({type: 'FAIL', error: 'Subtype is not edited'} as FailAction);
     }
 };
 
@@ -148,6 +143,11 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
                 ...state,
                 vehicleType: [...state.vehicleType, ...action.types],
             };
+        case 'ADD_TYPE':
+            return {
+            ...state,
+            vehicleType: [...state.vehicleType, action.vehicleType],
+        };
         case 'GET_SUB_TYPES':
             return {
                 ...state,
@@ -173,9 +173,15 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
             const vehicleType = newState.vehicleType.find((type) => type.id == action.subtype.transportId);
             let subType = vehicleType!.subTypes.find((subtype) => subtype.id === action.subtype.id);
             subType!.name = action.subtype.name;
-            
 
-            return newState;   
+            return newState;
+
+        case 'FAIL':
+            return {
+                ...state,
+                errorMessage: action.error
+            }
+        
         default:
             return state;
     }
