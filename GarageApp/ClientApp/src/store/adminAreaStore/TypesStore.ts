@@ -1,7 +1,7 @@
 import {Action, Reducer} from "redux";
-import {AppThunkAction} from "./index";
-import * as HttpClient from "../services/HttpClient"
-import * as config from "../config/urls"
+import {AppThunkAction} from "../index";
+import * as HttpClient from "../../services/HttpClient"
+import * as config from "../../config/urls"
 import {act} from "react-dom/test-utils";
 
 export interface Type{
@@ -16,7 +16,7 @@ export interface SubType{
     transportId: number
 }
 
-export interface AdminAreaState{
+export interface TypesState{
     vehicleType: Type[],
     errorMessage: string
 }
@@ -33,17 +33,15 @@ export interface FailAction { type: 'FAIL', error: string}
 export type KnownAction = GetVehicleTypesAction | GetVehicleSubTypesAction | GetVehicleBrandsAction | GetVehicleModelAction | FailAction | AddSubTypeAction | EditSubTypeAction | AddTypeAction;
 
 
-const emptyState: AdminAreaState = {
+const emptyState: TypesState = {
     vehicleType: new Array<Type>(),
     errorMessage: ''
 };
 
-
-
 export const actionCreators = {
     getTypes: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-        if(getState().adminArea.vehicleType.length) return;
-        
+        if(getState().types.vehicleType.length) return;
+
         const result = await HttpClient.get(config.TYPES_BASE_URL);
         let types: Type[] = result.body;
 
@@ -64,7 +62,7 @@ export const actionCreators = {
 
         const result = await HttpClient.post(
             config.TYPES_BASE_URL + `add`,
-            JSON.stringify(body), 
+            JSON.stringify(body),
             headers );
 
         return result.success
@@ -72,7 +70,7 @@ export const actionCreators = {
             : dispatch({type: 'FAIL', error: 'Type is not added'} as FailAction);
 
     },
-    
+
     getSubType: (vehicleTypeId: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         //if(getState().adminArea.vehicleType.length) return;
 
@@ -88,24 +86,24 @@ export const actionCreators = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        
+
         const body = {
             name: name,
             transportTypeid: vehicleTypeId
         };
-        
+
         const result = await HttpClient.post(
-            config.TYPES_BASE_URL + `subtype/add`, 
+            config.TYPES_BASE_URL + `subtype/add`,
             JSON.stringify(body, (key, value)=>{
                 if(key == 'transportTypeid')
                 {
                     value = parseInt(value);
                 }
-                
+
                 return value;
-            }), 
+            }),
             headers );
-        
+
         return result.success
             ? dispatch({type: 'ADD_SUB_TYPE', subtype: result.body, typeId: vehicleTypeId} as AddSubTypeAction)
             : dispatch({type: 'FAIL', error: 'Subtype is not added'} as FailAction);
@@ -115,7 +113,7 @@ export const actionCreators = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        
+
         const result = await HttpClient.put(
             config.TYPES_BASE_URL + `subtype/edit`,
             JSON.stringify(subType, (key, value)=>{
@@ -127,16 +125,16 @@ export const actionCreators = {
                 return value;
             }),
             headers );
-        
+
         return result.success
             ? dispatch({type: 'EDIT_SUB_TYPE', subtype: subType} as EditSubTypeAction)
             : dispatch({type: 'FAIL', error: 'Subtype is not edited'} as FailAction);
     }
 };
 
-export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptyState, incomingAction: Action): AdminAreaState => {
+export const reducer: Reducer<TypesState> = (state: TypesState = emptyState, incomingAction: Action): TypesState => {
     const action = incomingAction as KnownAction;
-    
+
     switch (action.type) {
         case 'GET_TYPES':
             return {
@@ -145,9 +143,9 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
             };
         case 'ADD_TYPE':
             return {
-            ...state,
-            vehicleType: [...state.vehicleType, action.vehicleType],
-        };
+                ...state,
+                vehicleType: [...state.vehicleType, action.vehicleType],
+            };
         case 'GET_SUB_TYPES':
             return {
                 ...state,
@@ -164,12 +162,12 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
             }
         case 'EDIT_SUB_TYPE':
 
-            const newState: AdminAreaState = {
+            const newState: TypesState = {
                 ...state,
                 vehicleType: state.vehicleType.map(
                     (type) => type.id === action.subtype.transportId  ? {...type, subTypes: [...type.subTypes]} : type)
             }
-            
+
             const vehicleType = newState.vehicleType.find((type) => type.id == action.subtype.transportId);
             let subType = vehicleType!.subTypes.find((subtype) => subtype.id === action.subtype.id);
             subType!.name = action.subtype.name;
@@ -181,7 +179,7 @@ export const reducer: Reducer<AdminAreaState> = (state: AdminAreaState = emptySt
                 ...state,
                 errorMessage: action.error
             }
-        
+
         default:
             return state;
     }

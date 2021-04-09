@@ -29,9 +29,9 @@ namespace Garage.Types.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            await _transportBrandService.AddTransportBrand(transportBrandAddDto);
+            var addedBrand = await _transportBrandService.AddTransportBrand(transportBrandAddDto);
             
-            return Ok();
+            return Ok(addedBrand);
         }
     }
 }

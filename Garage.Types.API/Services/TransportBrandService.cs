@@ -29,11 +29,15 @@ namespace Garage.Types.API.Services
             return transportBrandDtos;
         }
 
-        public async Task AddTransportBrand(TransportBrandAddDto transportBrandAddDto)
+        public async Task<TransportBrandDto> AddTransportBrand(TransportBrandAddDto transportBrandAddDto)
         {
             var transportBrand = _mapper.Map<TransportBrand>(transportBrandAddDto);
 
-            await _transportBrandRepository.Add(transportBrand);
+            var addedBrand = await _transportBrandRepository.Add(transportBrand);
+
+            var addedBrandDto = _mapper.Map<TransportBrandDto>(addedBrand);
+            
+            return addedBrandDto;
         }
     }
 }

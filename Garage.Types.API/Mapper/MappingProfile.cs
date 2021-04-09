@@ -17,12 +17,13 @@ namespace Garage.Types.API.Mapper
                     opt => opt
                         .MapFrom(src =>src.TransportTypeId));
             CreateMap<TransportBrandAddDto, TransportBrand>();
+            CreateMap<TransportBrand, TransportBrandDto>();
+
             CreateMap<TransportModelDto, TransportModel>()
                 .ForMember(dest => dest.TransportBrandId,
                     opt => opt
-                        .MapFrom(src =>src.BrandId));
-            CreateMap<TransportBrand, TransportBrandDto>();
-            
+                        .MapFrom(src =>src.TransportBrandId));
+            CreateMap<TransportModel, TransportModelDto>();
         }
     }
 }

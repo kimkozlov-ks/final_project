@@ -1,7 +1,5 @@
 import React, {ChangeEvent, FC, ReactElement, useRef, useState} from "react";
 import Input from "./Input";
-import {AdminAreaState, SubType} from "../store/AdminAreaStore";
-import {connect} from "react-redux";
 
 type InputWithButtonProps = {
     isVisible: boolean,
@@ -12,10 +10,14 @@ type InputWithButtonState = {
     newText: string
 }
 
+
 const InputWithButton: FC<InputWithButtonProps> = (props: InputWithButtonProps): ReactElement | null=> {
 
-    const [state, setState] = React.useState<InputWithButtonState>({newText: ''});
-   
+    const [state, setState] = useState<InputWithButtonState>({newText: ''});
+    
+    let clearInput: () => void;
+    
+
     function onValueChange(event: ChangeEvent<HTMLInputElement>) {
         setState({newText: event.target.value});
 
@@ -23,13 +25,14 @@ const InputWithButton: FC<InputWithButtonProps> = (props: InputWithButtonProps):
     }
     
     function onSaveClicked(event: React.MouseEvent<HTMLButtonElement>){
+        clearInput();
         props.onSave(state.newText);
     }
     
     return (
         <span>
-        <Input isVisible={props.isVisible} name={''} onChange={onValueChange} placeholder={"edit subtype"} type={'text'} />
-        <button onClick={onSaveClicked}>Save</button>
+        <Input isVisible={props.isVisible} name={''} onChange={onValueChange} placeholder={"edit subtype"} type={'text'} setClear={clear => clearInput = clear}/>
+        <button onClick={onSaveClicked} >Save</button>
         </span>
     );
 }

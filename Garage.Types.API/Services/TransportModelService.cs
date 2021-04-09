@@ -20,11 +20,15 @@ namespace Garage.Types.API.Services
             _transportModelRepository = transportModelRepository;
         }
 
-        public async Task AddTransportModel(TransportModelDto transportModelDto)
+        public async Task<TransportModelDto> AddTransportModel(TransportModelDto transportModelDto)
         {
             var transportBrand = _mapper.Map<TransportModel>(transportModelDto);
 
-            await _transportModelRepository.Add(transportBrand);
+            var addedModel = await _transportModelRepository.Add(transportBrand);
+
+            var addedModelDto = _mapper.Map<TransportModelDto>(addedModel);
+
+            return addedModelDto;
         }
 
         public async Task<ActionResult<IEnumerable<TransportModelDto>>> GetTransportModelsByBrand(int id)
@@ -34,6 +38,20 @@ namespace Garage.Types.API.Services
             var modelsByBrandDtos = modelsByBrand.Select(s => _mapper.Map<TransportModelDto>(s)).ToList();
             
             return modelsByBrandDtos;
+        }
+
+        public async Task EditModel(TransportModelDto transportModelDto)
+        {
+            var transportModel = await _transportModelRepository.Get(transportModelDto.Id);
+
+            if (transportModel == null)
+            {
+                return;
+            }
+
+            transportModel.Name = transportModelDto.Name;
+            
+            await _transportModelRepository.Update(transportModel);
         }
     }
 }

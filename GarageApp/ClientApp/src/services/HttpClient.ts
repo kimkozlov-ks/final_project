@@ -30,12 +30,12 @@ export async function post(url: string, body: string, headers: any) : Promise<Re
             headers: headers,
             body: body
         });
-        
+
         if(res.status != 200)
         {
             return {success: false, err: `Status code ${res.status}`};
         }
-
+        
         const data = await res.json();
         
         return {success: true, body: data};

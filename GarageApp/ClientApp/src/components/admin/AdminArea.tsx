@@ -1,99 +1,45 @@
 import * as React from 'react'
-import {compose} from "redux";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
-import {ApplicationState} from "../../store";
-import {connect} from "react-redux";
-import * as AdminAreaStore from "../../store/AdminAreaStore";
-import {SubType, Type} from "../../store/AdminAreaStore";
-import {ChangeEvent, useRef, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit} from "@fortawesome/free-solid-svg-icons";
-import InputWithButton from "../InputWithButton";
+import TypesTab from './TypesTab'
+import BrandsTab from './BrandsTab'
+import {useState} from "react";
 
-type AdminAreaProps =
-    AdminAreaStore.AdminAreaState &
-    typeof AdminAreaStore.actionCreators;
+type AdminAreaProps = {};
+
+enum TabId {
+    TYPES_TAB = 0,
+    BRANDS_TAB = 1,
+}
 
 function AdminArea(adminAreaProps: AdminAreaProps) {
-    
-    adminAreaProps.getTypes();
-    
-    const [inputValues, setInput] = useState(['']);
-    const [addTypeInput, setAddTypeInput] = useState('');
-    let checked = 'Types';
-    
-    function onValueChange(event: React.FormEvent<HTMLInputElement>) {
-        adminAreaProps.getTypes();
-    }
-    
-    function onClickType(event: React.MouseEvent, id: number) {
-        adminAreaProps.getSubType(id);
-    }
-    
-    function renderSubtypes(type: Type)
-    {   
-        if(type.subTypes === undefined) return;
-        
-        return (
-            <ul>
-                {type.subTypes.map((subtype, index) => 
-                    <li key={subtype.id}>
-                    {subtype.name}
-                    {/*<FontAwesomeIcon icon={faEdit} onClick={() => onEditClick( subtype.id)}/>*/}
-                    <InputWithButton  isVisible={true} key={index} onSave={(newText: string) => adminAreaProps.editSubType({id: subtype.id, name: newText, transportId: subtype.transportId})}/>
-                </li> )}
-            </ul>
-        );
+
+    const [activeTab, setActiveTab] = useState(TabId.TYPES_TAB);
+
+    function renderSwitch() {
+        switch(activeTab) {
+            case TabId.TYPES_TAB:
+                return <TypesTab/>;
+            case TabId.BRANDS_TAB:
+                return <BrandsTab/>;
+            default:
+                return <TypesTab/>;
+        }
     }
 
-    function addSubType(id: number, index: number) {
-        adminAreaProps.addSubtype(id, inputValues[index]);
-    }
-    
-    function handleChange(event: React.ChangeEvent<HTMLInputElement>, index: number) {
-        const { value } = event.target;
-        inputValues[index] = value;
-
-        let newArr = [...inputValues]; 
-        newArr[index] = value; 
-
-        setInput(newArr); 
+    function onTabClick(tabId: TabId)
+    {
+        setActiveTab(tabId);
     }
     
     return (
-        <div>
-            <ul>
-                {
-                    adminAreaProps.vehicleType.map((el, index) => 
-                    <li key={index} onClick={(event) => onClickType(event, el.id)} >
-                        {el.name}
-                        {renderSubtypes(el)}
-                        <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
-                        />
-                        <button onClick={() => addSubType(el.id, index)}>Add</button>
-                      
-                    </li>)
-                }
-            </ul>
-            
-            <input 
-                name={'AddType'} 
-                placeholder={'new type'}  
-                value={addTypeInput} type='text' onChange={(event) =>         setAddTypeInput(event.target.value)}
-                />
-            <button onClick={() => adminAreaProps.addType(addTypeInput)}>Add</button>
-        </div>
-    );
+    <div>
+        <span onClick={() => onTabClick(TabId.TYPES_TAB)}> TYPES </span>
+        <span onClick={() => onTabClick(TabId.BRANDS_TAB)}> BRANDS </span>
+        {renderSwitch()}
+    </div>);
+   
 }
 
-let withConnect = connect(
-    (state: ApplicationState) => {
-        return state.adminArea
-    },
-    AdminAreaStore.actionCreators
-)(AdminArea as any)
-
-export default withConnect;
+export default AdminArea;
 
 // export default compose(
 //     withAuthRedirect

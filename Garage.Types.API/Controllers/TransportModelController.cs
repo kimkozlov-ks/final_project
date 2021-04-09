@@ -23,15 +23,25 @@ namespace Garage.Types.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            await _transportModelService.AddTransportModel(transportModelDto);
-            
-            return Ok();
+            var addedModel = await _transportModelService.AddTransportModel(transportModelDto);
+
+            return Ok(addedModel);
         }
         
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<TransportModelDto>>> GetTransportSubTypesByTypeId([FromRoute] int id)
         {
             return await _transportModelService.GetTransportModelsByBrand(id);
+        }
+        
+        [HttpPut("edit")] 
+        public async Task<IActionResult> EditTransportSubType([FromBody] TransportModelDto transportModelDto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            await _transportModelService.EditModel(transportModelDto);
+            
+            return Ok();
         }
     }
 }
