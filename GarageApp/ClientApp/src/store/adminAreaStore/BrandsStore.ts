@@ -135,6 +135,8 @@ export const reducer: Reducer<BrandsState> = (state: BrandsState = emptyState, i
 
     switch (action.type) {
         case 'GET_BRANDS':
+            if(state.brands.length) return state;
+            
             return {
                 ...state,
                 brands: [...state.brands, ...action.brands],

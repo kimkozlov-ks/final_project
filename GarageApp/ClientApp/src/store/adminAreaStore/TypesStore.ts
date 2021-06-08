@@ -137,6 +137,8 @@ export const reducer: Reducer<TypesState> = (state: TypesState = emptyState, inc
 
     switch (action.type) {
         case 'GET_TYPES':
+            if(state.vehicleType.length) return state;
+            
             return {
                 ...state,
                 vehicleType: [...state.vehicleType, ...action.types],
