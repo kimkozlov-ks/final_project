@@ -70,7 +70,7 @@ namespace Auth.API.Controllers
         
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] UserDto userDto)
-        {
+        {    
             var existedUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userDto.Username);
 
             if (existedUser != null)
@@ -82,7 +82,7 @@ namespace Auth.API.Controllers
             {
                 Username = userDto.Username,
                 Password = userDto.Password,
-                Role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Role1")
+                Role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User")
             };
             
             user.Role.RolePermissions = await _context.RolePermissions

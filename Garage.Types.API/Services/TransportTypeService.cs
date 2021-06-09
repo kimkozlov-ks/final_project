@@ -27,7 +27,14 @@ namespace Garage.Types.API.Services
         {
             var transportTypes = await _transportTypeRepository.GetAll();
             
-            return transportTypes.Select(t => _mapper.Map<TransportTypeDto>(t)).ToList();
+            foreach (var type in transportTypes)
+            {
+                type.SubTypes = await _transportSubTypeRepository.GetSubTypesByType(type.Id);
+            }
+            
+            var transportTypesDtos = transportTypes.Select(t => _mapper.Map<TransportTypeDto>(t)).ToList();
+
+            return transportTypesDtos;
         }
 
         public async Task<TransportTypeDto> AddTransportType(TransportTypeAddDto transportTypeAddDto)
@@ -35,7 +42,7 @@ namespace Garage.Types.API.Services
             var transportType = _mapper.Map<TransportType>(transportTypeAddDto);
             
             await _transportTypeRepository.Add(transportType);
-
+         
             var addedTransportTypeDto = _mapper.Map<TransportTypeDto>(transportType);
             
             return addedTransportTypeDto;

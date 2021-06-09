@@ -6,6 +6,6 @@ namespace Garage.Types.Data.Model
     public class TransportBrand : Entity
     {
         public string Name { get; set; }
-        public List<TransportSubType> Models { get; set; }
+        public List<TransportModel> Models { get; set; }
     }
 }

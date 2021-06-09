@@ -16,7 +16,7 @@ namespace Garage.Types.API.Repositories
 
         public async Task<List<TransportSubType>> GetSubTypesByType(int typeId)
         {
-            return await GetDbContext().TransportSubTypes.Where(t => t.TransportId == typeId).ToListAsync();
+            return await GetDbContext().TransportSubTypes.Where(t => t.TransportType.Id == typeId).ToListAsync();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using Garage.Types.API.Dto;
 using Garage.Types.Data.Model;
@@ -7,7 +8,7 @@ namespace Garage.Types.API.Mapper
 {
     public class MappingProfile: Profile
     {
-        public MappingProfile() 
+        public MappingProfile()
         {
             CreateMap<TransportType, TransportTypeDto>();
             CreateMap<TransportTypeAddDto, TransportType>();
@@ -17,7 +18,11 @@ namespace Garage.Types.API.Mapper
                     opt => opt
                         .MapFrom(src =>src.TransportTypeId));
             CreateMap<TransportBrandAddDto, TransportBrand>();
-            CreateMap<TransportBrand, TransportBrandDto>();
+            CreateMap<TransportBrand, TransportBrandDto>()
+                .ForMember(
+                    dest => dest.Models, 
+                    opt => 
+                        opt.MapFrom(src => src.Models));
 
             CreateMap<TransportModelDto, TransportModel>()
                 .ForMember(dest => dest.TransportBrandId,

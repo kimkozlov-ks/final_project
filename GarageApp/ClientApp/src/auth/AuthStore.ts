@@ -31,6 +31,13 @@ export const actionCreators = {
             ? dispatch({type: 'LOGIN', user: decodeToken(result.body!)} as LoginAction)
             : dispatch({type: 'LOGIN_FAIL', errorMessage: result.err} as LoginFailAction);
     },
+    register: (username: string, password: string): AppThunkAction<KnownAction> => async (dispatch) => {
+        const result = await AuthService.register(username, password);
+        debugger
+        return result.success
+            ? dispatch({type: 'LOGIN', user: decodeToken(result.body!)} as LoginAction)
+            : dispatch({type: 'LOGIN_FAIL', errorMessage: result.err} as LoginFailAction);
+    },
     logout: (): AppThunkAction<KnownAction> => async (dispatch) => {
         const result = await AuthService.logout();
 
@@ -38,6 +45,7 @@ export const actionCreators = {
             ? dispatch({type: 'LOGOUT'} as LogoutAction)
             : dispatch({type: 'LOGOUT_FAIL', errorMessage: result.err} as LogoutFailAction);
     }
+    
 };
 
 export const reducer: Reducer<AuthState> = (state: AuthState = emptyState, incomingAction: Action): AuthState => {

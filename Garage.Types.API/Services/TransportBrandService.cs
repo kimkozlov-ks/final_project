@@ -12,18 +12,25 @@ namespace Garage.Types.API.Services
     public class TransportBrandService
     {
         private readonly TransportBrandRepository _transportBrandRepository;
+        private readonly TransportModelRepository _transportModelRepository;
         private readonly IMapper _mapper;
 
-        public TransportBrandService(TransportBrandRepository transportBrandRepository, IMapper mapper)
+        public TransportBrandService(TransportBrandRepository transportBrandRepository, IMapper mapper, TransportModelRepository transportModelRepository)
         {
             _transportBrandRepository = transportBrandRepository;
             _mapper = mapper;
+            _transportModelRepository = transportModelRepository;
         }
 
         public async Task<ActionResult<IEnumerable<TransportBrandDto>>> GetTransportBrandes()
         {
             var transportBrands = await _transportBrandRepository.GetAll();
-
+            
+            foreach (var transportBrand in transportBrands)
+            {
+                transportBrand.Models = await _transportModelRepository.GetModelsByBrandId(transportBrand.Id);
+            }
+            
             var transportBrandDtos = transportBrands.Select(b => _mapper.Map<TransportBrandDto>(b)).ToList();
             
             return transportBrandDtos;

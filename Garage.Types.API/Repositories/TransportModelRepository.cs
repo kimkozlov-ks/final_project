@@ -18,6 +18,5 @@ namespace Garage.Types.API.Repositories
         {
             return await GetDbContext().TransportModels.Where(t => t.TransportBrandId == typeId).ToListAsync();
         }
-
     }
 }

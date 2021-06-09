@@ -20,8 +20,9 @@ namespace Garage.Types.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransportTypeDto>>> GetTransportTypes()
-        {
-            return await _transportTypeService.GetTransportTypes();
+        {    
+            var transportTypeDtos = await _transportTypeService.GetTransportTypes();
+            return Ok(transportTypeDtos);
         }
 
         [HttpPost("add")] 

@@ -33,7 +33,33 @@ const AuthService = {
             return {success: false, err: "Login failed! Exception: " + err };
         }
     },
+        
+    register: async function (username: string, password: string) : Promise<Response> {
+        try {
+            debugger
+            const url = baseUrl + 'register';
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+            }) ;
 
+            if(res.status != 200)
+            {
+                return {success: false, err: "Incorrect input" }
+            }
+
+            const data = await res.json();
+            localStorage.setItem(ACCESS_TOKEN_KEY, data.value);
+            return {success: true, body: data.value };
+
+        } catch (err) {
+            return {success: false, err: "Register failed! Exception: " + err };
+        }
+    },
 
     logout: async function() : Promise<Response> {
         try {

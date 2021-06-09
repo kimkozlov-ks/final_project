@@ -38,7 +38,7 @@ const emptyState: BrandsState = {
 export const actionCreators = {
     getBrands: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         if(getState().brands.brands.length) return;
-
+        
         const result = await HttpClient.get(config.BRANDS_BASE_URL);
         let brands: Brand[] = result.body;
 
