@@ -35,10 +35,14 @@ class NavMenu extends React.PureComponent<Props, { isOpen: boolean }> {
                                 </NavItem>
                                 {
                                     !this.props.loggedIn 
-                                        ?  
-                                            <NavItem>
-                                                <NavLink tag={Link} className="text-dark" to={'/login-form'}>Login</NavLink>
-                                            </NavItem>
+                                        ?  <>
+                                                <NavItem>
+                                                    <NavLink tag={Link} className="text-dark" to={'/login-form'}>Login</NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink tag={Link} className="text-dark" to={'/register'}>Register</NavLink>
+                                                </NavItem>                     
+                                             </>
                                         :  
                                             <NavItem>
                                                 <NavLink tag={Link} className="text-dark" to={'/logout'}>Logout</NavLink>

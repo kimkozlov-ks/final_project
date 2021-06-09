@@ -6,6 +6,7 @@ import Home from './components/Home';
 import './custom.css'
 import LoginForm from "./auth/LoginForm";
 import Logout from "./auth/Logout";
+import Register from "./auth/RegisterForm";
 import AdminArea from "./components/admin/AdminArea";
 import GarageWrapper from "./components/garage/GarageWrapper";
 
@@ -16,5 +17,6 @@ export default () => (
         <Route path='/garage' component={GarageWrapper} />
         <Route exact path='/login-form' component={LoginForm} />
         <Route exact path='/logout' component={Logout} />
+        <Route exact path='/register' component={Register} />
     </Layout>
 );
