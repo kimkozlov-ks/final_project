@@ -8,7 +8,7 @@ namespace Garage.Types.Data.Model
         public string Name { get; set; }
         
         [ForeignKey("TransportType")]
-        public int TransportId { get; set; }
+        public int TransportTypeId { get; set; }
         public TransportType TransportType { get; set; }
     }
 }

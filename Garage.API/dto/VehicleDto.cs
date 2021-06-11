@@ -6,6 +6,7 @@ namespace Garage.API.dto
     public class VehicleDto
     {
         public int Id { get; set; }
+        public string Nickname { get; set;  }
         public int TypeId { get; set; }
         [Required]
         public int SubTypeId { get; set; }

@@ -5,8 +5,8 @@ namespace Garage.Types.API.Dto
 {
     public class TransportTypeDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public List<TransportSubType> SubTypes { get; set; }
+        public List<TransportSubTypeDto> SubTypes { get; set; }
     }
 }

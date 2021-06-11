@@ -23,8 +23,9 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
     const [selectedBrand, setSelectedBrand] = useState(props.brands.brands[0]);
     const [selectedSubBrand, setSelectedSubBrand] = useState(null);
     
-    function handleSubmit(){
-        
+    function handleSubmit(event: any){
+        event.preventDefault()
+        console.log(event)
     }
 
     function handleChange(event: React.FormEvent<HTMLSelectElement>){
@@ -50,12 +51,36 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
         }
     }
 
+    function handleTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        const selectedType = props.types.vehicleType.find(type => type.id.toString() === event.target.value)
+        if(selectedType !== undefined) {
+            setSelectedVehicleType(selectedType)
+        }
+    }
+
     return (
-        <Form>
-            {/*<FormGroup>*/}
-            {/*    <Label for="vehicleName">Name</Label>*/}
-            {/*    <Input type="password" name="password" id="vehicleName" placeholder="password placeholder" />*/}
-            {/*</FormGroup>*/}
+        <Form onSubmit={handleSubmit}>
+            <FormGroup>
+                <Label for="vehicleName">Nickname</Label>
+                <Input type="text" name="text" id="vehicleName"/>
+            </FormGroup>
+            <FormGroup>
+                <Label for="exampleSelect">Type</Label>
+                <Input type="select" name="select" id="exampleSelect" onChange={handleTypeSelect}>
+                    {props.types.vehicleType.map(type => (<option id={type.id.toString()} value={type.id}>{type.name}</option>))}
+                </Input>
+                <Label for="exampleSelect">SubType</Label>
+                <Input type="select" name="select" id="exampleSelect">
+                    {
+                        props.types.vehicleType.map(type => {
+                            if(selectedVehicleType && type.id === selectedVehicleType.id){
+                                return type.subTypes.map(subType => (
+                                    <option id={subType.id.toString()}>{subType.name}</option>));
+                            }
+                        })
+                    }
+                </Input>
+            </FormGroup>
             <FormGroup>
                 <Label for="exampleSelect">Brand</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleBrandSelect}>
@@ -74,53 +99,15 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
                 </Input>
             </FormGroup>
             <FormGroup>
-                <Label for="exampleSelectMulti">Select Multiple</Label>
-                <Input type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </Input>
-            </FormGroup>
-            <FormGroup>
-                <Label for="exampleText">Text Area</Label>
+                <Label for="exampleText">Description</Label>
                 <Input type="textarea" name="text" id="exampleText" />
             </FormGroup>
             <FormGroup>
                 <Label for="exampleFile">File</Label>
-                <Input type="file" name="file" id="exampleFile" />
+                <Input type="file" name="file" id="exampleFile" accept="image/png, image/png, image/jpeg"/>
                 <FormText color="muted">
-                    This is some placeholder block-level help text for the above input.
-                    It's a bit lighter and easily wraps to a new line.
+                    Select a photo
                 </FormText>
-            </FormGroup>
-            <FormGroup tag="fieldset">
-                <legend>Radio Buttons</legend>
-                <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="radio1" />{' '}
-                        Option one is this and that—be sure to include why it's great
-                    </Label>
-                </FormGroup>
-                <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="radio1" />{' '}
-                        Option two can be something else and selecting it will deselect option one
-                    </Label>
-                </FormGroup>
-                <FormGroup check disabled>
-                    <Label check>
-                        <Input type="radio" name="radio1" disabled />{' '}
-                        Option three is disabled
-                    </Label>
-                </FormGroup>
-            </FormGroup>
-            <FormGroup check>
-                <Label check>
-                    <Input type="checkbox" />{' '}
-                    Check me out
-                </Label>
             </FormGroup>
             <Button>Submit</Button>
         </Form>

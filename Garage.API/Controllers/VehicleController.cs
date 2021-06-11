@@ -24,7 +24,7 @@ namespace Garage.API.Controllers
         }
         
         [HttpPost("add")] 
-        public async Task<ActionResult<VehicleDto>> AddTransportType([FromBody] VehicleDto vehicleDto)
+        public async Task<ActionResult<VehicleDto>> AddVehicle([FromBody] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
             

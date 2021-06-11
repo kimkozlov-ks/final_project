@@ -14,7 +14,7 @@ namespace Garage.Types.API.Mapper
             CreateMap<TransportTypeAddDto, TransportType>();
             CreateMap<TransportSubType, TransportSubTypeDto>();
             CreateMap<TransportSubTypeAddDto, TransportSubType>()
-                .ForMember(dest => dest.TransportId,
+                .ForMember(dest => dest.TransportTypeId,
                     opt => opt
                         .MapFrom(src =>src.TransportTypeId));
             CreateMap<TransportBrandAddDto, TransportBrand>();

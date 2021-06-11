@@ -27,13 +27,13 @@ namespace Garage.Types.API.Services
         {
             var transportTypes = await _transportTypeRepository.GetAll();
             
-            foreach (var type in transportTypes)
+            foreach (var transportType in transportTypes)
             {
-                type.SubTypes = await _transportSubTypeRepository.GetSubTypesByType(type.Id);
+                transportType.SubTypes = await _transportSubTypeRepository.GetSubTypesByType(transportType.Id);
             }
             
             var transportTypesDtos = transportTypes.Select(t => _mapper.Map<TransportTypeDto>(t)).ToList();
-
+            
             return transportTypesDtos;
         }
 

@@ -6,6 +6,8 @@ namespace Garage.Data.Entity
     {
         public int Id { get; set; }
         
+        public string Nickname { get; set;  }
+        
         [ForeignKey("TransportType")]
         public int TypeId { get; set; }
         
