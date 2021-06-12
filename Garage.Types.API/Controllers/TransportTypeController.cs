@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Garage.Types.API.Dto;
 using Garage.Types.API.Services;
 using Garage.Types.Data.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Garage.Types.API.Controllers
 {    
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class TransportTypeController : Controller
     {
@@ -25,6 +27,7 @@ namespace Garage.Types.API.Controllers
             return Ok(transportTypeDtos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("add")] 
         public async Task<ActionResult<TransportTypeDto>> AddTransportType([FromBody] TransportTypeAddDto transportTypeAddDto)
         {
@@ -39,6 +42,7 @@ namespace Garage.Types.API.Controllers
             return await _transportTypeService.GetTransportSubTypesByTypeId(id);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPost("subtype/add")] 
         public async Task<ActionResult<TransportSubTypeDto>> AddTransportSubType([FromBody] TransportSubTypeAddDto transportSubTypeAddDto)
         {
@@ -47,6 +51,7 @@ namespace Garage.Types.API.Controllers
             return  await _transportTypeService.AddTransportSubType(transportSubTypeAddDto);
         }    
         
+        [Authorize(Roles = "Admin")]
         [HttpPut("subtype/edit")] 
         public async Task<IActionResult> EditTransportSubType([FromBody] TransportSubTypeAddDto transportSubTypeAddDto)
         {
