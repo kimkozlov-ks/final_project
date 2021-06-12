@@ -31,7 +31,7 @@ namespace Auth.API.Controllers
         
         [HttpPost("login")]
         public async Task<ActionResult<ResponseAccessToken>> Login([FromBody] UserDto model)
-        {
+        {    
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var identityUser = HttpContext.User;

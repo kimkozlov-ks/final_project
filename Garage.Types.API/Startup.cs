@@ -8,6 +8,7 @@ using Garage.Types.API.Mapper;
 using Garage.Types.API.Repositories;
 using Garage.Types.API.Services;
 using Garage.Types.Data;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,23 +48,7 @@ namespace Garage.Types.API
                     });
             });
             
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = false,
-                        ValidateIssuerSigningKey = true,
-                        RequireSignedTokens = true,
-                        ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtTokenSecret"]))
-                    };
-                });
+            JwtSetup.Setup(services);
             services.AddTransient<TransportTypeService>();
             services.AddTransient<TransportTypeRepository>();
             services.AddTransient<TransportSubTypeRepository>();

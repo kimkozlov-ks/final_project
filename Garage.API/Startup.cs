@@ -8,6 +8,7 @@ using Garage.API.Mappers;
 using Garage.API.Repositories;
 using Garage.API.Services;
 using Garage.Types.Data;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,8 +36,8 @@ namespace Garage.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
-             services.AddCors(options =>
+
+            services.AddCors(options =>
             {
                 options.AddPolicy(name: "localhost",
                     builder =>
@@ -46,38 +47,19 @@ namespace Garage.API
                             .AllowAnyMethod();
                     });
             });
-            
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = false,
-                        ValidateIssuerSigningKey = true,
-                        RequireSignedTokens = true,
-                        ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtTokenSecret"]))
-                    };
-                });
+
+            JwtSetup.Setup(services);
             services.AddTransient<VehicleRepository>();
             services.AddTransient<VehicleService>();
-            
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MapperProfile.MappingProfile());
-            });
-            
+
+            var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile.MappingProfile()); });
+
             services.AddSingleton(mapperConfig.CreateMapper());
-            
+
             var connectionString = Configuration["DbConnectionString"];
             services.AddDbContext<TypesDbContext>(
                 b => b.UseNpgsql(
-                    connectionString, 
+                    connectionString,
                     m => m.MigrationsAssembly("Garage.API")));
         }
 
@@ -90,13 +72,13 @@ namespace Garage.API
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseCors(builder => builder
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
                 .SetIsOriginAllowed((host) => true));
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
