@@ -45,14 +45,12 @@ export const actionCreators = {
     
     login: (username: string, password: string): AppThunkAction<KnownAction> => async (dispatch) => {
         const result = await AuthService.login(username, password);
-        debugger
         return result.success
             ? dispatch({type: 'LOGIN', user: decodeToken(result.body!)} as LoginAction)
             : dispatch({type: 'LOGIN_FAIL', errorMessage: result.err} as LoginFailAction);
     },
     register: (username: string, password: string): AppThunkAction<KnownAction> => async (dispatch) => {
         const result = await AuthService.register(username, password);
-        debugger
         return result.success
             ? dispatch({type: 'LOGIN', user: decodeToken(result.body!)} as LoginAction)
             : dispatch({type: 'LOGIN_FAIL', errorMessage: result.err} as LoginFailAction);

@@ -37,7 +37,6 @@ const AuthService = {
         
     register: async function (username: string, password: string) : Promise<Response> {
         try {
-            debugger
             const url = baseUrl + 'register';
             const res = await fetch(url, {
                 method: 'POST',

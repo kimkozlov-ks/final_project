@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Garage.API.dto;
 using Garage.API.Services;
@@ -20,17 +22,31 @@ namespace Garage.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<VehicleDto>> GetById([FromRoute] int id)
+        public async Task<ActionResult<AddVehicleDto>> GetById([FromRoute] int id)
         {
             return await _vehicleService.GetVehicleById(id);
         }
         
+        [HttpGet("my")]
+        public async Task<ActionResult<List<SendVehicleDto>>> GetByUserId()
+        {    
+            var userId = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value; 
+            
+            return Ok(await _vehicleService.GetUserVehicle(userId));
+        }
+        
         [HttpPost("add")] 
-        public async Task<ActionResult<VehicleDto>> AddVehicle([FromForm] VehicleDto vehicleDto)
+        public async Task<ActionResult<AddVehicleDto>> AddVehicle([FromForm] AddVehicleDto addVehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
-
-            await _vehicleService.Add(vehicleDto);
+                
+            var userId = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value;
+            
+            await _vehicleService.Add(addVehicleDto, userId);
             
             return Ok();
         }

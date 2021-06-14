@@ -53,7 +53,7 @@ const AddMyVehicleForm: React.FC<Props> = ({
             data.append("modelid", selectedModel.id.toString());
             data.append("description", description);
             data.append("image", image);
-            const res  = await post('https://localhost:5009/api/vehicle/add', data )
+            const res  = await post( process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/add', data )
             
             if(res.success){
                 back()
@@ -98,7 +98,6 @@ const AddMyVehicleForm: React.FC<Props> = ({
 
     function handleSubTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
         const selectedSubType = selectedVehicleType.subTypes.find(subtype => subtype.id.toString() === event.target.value)
-        debugger
 
         if(selectedSubType !== undefined) {
             setSelectedSubVehicleType(prevState => selectedSubType)

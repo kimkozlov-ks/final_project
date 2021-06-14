@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Garage.API.Interface
 {
-    public interface IImageSaver
+    public interface IImageService
     {
         Task<string> Save(IFormFile file);
     }

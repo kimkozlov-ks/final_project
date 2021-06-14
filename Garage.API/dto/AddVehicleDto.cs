@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Garage.API.dto
 {
-    public class VehicleDto
+    public class AddVehicleDto
     {
         public int Id { get; set; }
         public string Nickname { get; set;  }

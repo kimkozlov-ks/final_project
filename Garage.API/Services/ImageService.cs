@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Garage.API.Services
 {
-    public class ImageService : IImageSaver
+    public class ImageService : IImageService
     {
         private readonly IWebHostEnvironment _environment;
 

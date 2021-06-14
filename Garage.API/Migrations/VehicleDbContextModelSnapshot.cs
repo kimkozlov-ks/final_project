@@ -47,6 +47,9 @@ namespace Garage.API.Migrations
                     b.Property<string>("Nickname")
                         .HasColumnType("text");
 
+                    b.Property<int>("OwnerUserId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SubTypeId")
                         .HasColumnType("integer");
 

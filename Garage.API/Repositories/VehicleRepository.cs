@@ -15,5 +15,10 @@ namespace Garage.API.Repositories
         public VehicleRepository(VehicleDbContext context) : base(context)
         {
         }
+
+        public async Task<List<VehicleEntity>> GetUserVehicles(int userId)
+        {
+            return await GetDbContext().Vehicles.Where(v => v.OwnerUserId == userId).ToListAsync();
+        }
     }
 }

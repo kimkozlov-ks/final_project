@@ -9,7 +9,6 @@ export function handleResponse(response) {
             if ([401].indexOf(response.status) !== -1) {
                 const result = AuthService.refresh()
                 if(!result.success){
-                    debugger
                     const dispatch = useDispatch()
                     const result = dispatch(actionCreators.logout())
                 }
