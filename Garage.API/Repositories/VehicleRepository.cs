@@ -20,5 +20,15 @@ namespace Garage.API.Repositories
         {
             return await GetDbContext().Vehicles.Where(v => v.OwnerUserId == userId).ToListAsync();
         }
+
+        public int Count()
+        {
+            return GetDbContext().Vehicles.Count();
+        }
+
+        public async Task<List<VehicleEntity>> GetPage(int page, int size)
+        {
+            return await GetDbContext().Vehicles.Skip((page - 1) * size).Take(size).ToListAsync();
+        }
     }
 }

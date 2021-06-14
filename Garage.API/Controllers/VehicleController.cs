@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Garage.API.dto;
+using Garage.API.Models;
 using Garage.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.API.Controllers
 {    
     [ApiController]
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     public class VehicleController : Controller
     {    
@@ -19,6 +20,14 @@ namespace Garage.API.Controllers
         public VehicleController(VehicleService vehicleService)
         {
             _vehicleService = vehicleService;
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult<VehicleViewModel>> GetById([FromQuery] int page, int size)
+        {
+            var pageView =  await _vehicleService.GetVehicles(page, size);
+
+            return Ok(pageView);
         }
 
         [HttpGet("{id}")]

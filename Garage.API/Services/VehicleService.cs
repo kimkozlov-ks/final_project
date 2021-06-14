@@ -3,8 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Garage.API.dto;
+using Garage.API.Models;
 using Garage.API.Repositories;
 using Garage.Data.Entity;
+using Infrastructure.Data.Pageable;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Garage.API.Services
 {
@@ -52,5 +55,24 @@ namespace Garage.API.Services
 
             return sendVehicleDtos;
         }
+
+        public async Task<VehicleViewModel> GetVehicles(int page, int size)
+        {
+            var count = _vehicleRepository.Count();
+            var vehicleEntities = await _vehicleRepository.GetPage(page, size);
+
+            var vehicleDtos = vehicleEntities.Select(v => _mapper.Map<SendVehicleDto>(v)).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, size);
+            VehicleViewModel viewModel = new VehicleViewModel
+            {
+                PageViewModel = pageViewModel,
+                Vehicles = vehicleDtos
+            };
+
+            return viewModel;
+        }
     }
+
+   
 }
