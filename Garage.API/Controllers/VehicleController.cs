@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Garage.API.dto;
 using Garage.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Garage.API.Controllers
 {    
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class VehicleController : Controller
     {    
@@ -24,7 +26,7 @@ namespace Garage.API.Controllers
         }
         
         [HttpPost("add")] 
-        public async Task<ActionResult<VehicleDto>> AddVehicle([FromBody] VehicleDto vehicleDto)
+        public async Task<ActionResult<VehicleDto>> AddVehicle([FromForm] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
             

@@ -4,7 +4,8 @@ import {handleResponse} from "../auth/helpers/handle-response";
 interface Response {
     success: boolean,
     err?: string,
-    body?: any
+    body?: any,
+    statusCode?: number
 }
 
 export async function get(url: string) : Promise<Response> {
@@ -29,8 +30,9 @@ export async function get(url: string) : Promise<Response> {
     }
 }
 
-export async function post(url: string, body: string, headers: any) : Promise<Response> {
+export async function post(url: string, body: string | FormData, headers?: any) : Promise<Response> {
     try {  
+        debugger
         const res = await fetch(url, {
             method: 'POST',
             headers: {...headers, ...authHeader()},
@@ -39,7 +41,7 @@ export async function post(url: string, body: string, headers: any) : Promise<Re
 
         if(res.status != 200)
         {
-            return {success: false, err: `Status code ${res.status}`};
+            return {success: false, err: `Status code ${res.status}`, statusCode: res.status};
         }
         
         const data = await res.json();

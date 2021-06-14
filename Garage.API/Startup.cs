@@ -7,6 +7,7 @@ using AutoMapper;
 using Garage.API.Mappers;
 using Garage.API.Repositories;
 using Garage.API.Services;
+using Garage.Data;
 using Garage.Types.Data;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -57,7 +58,7 @@ namespace Garage.API
             services.AddSingleton(mapperConfig.CreateMapper());
 
             var connectionString = Configuration["DbConnectionString"];
-            services.AddDbContext<TypesDbContext>(
+            services.AddDbContext<VehicleDbContext>(
                 b => b.UseNpgsql(
                     connectionString,
                     m => m.MigrationsAssembly("Garage.API")));

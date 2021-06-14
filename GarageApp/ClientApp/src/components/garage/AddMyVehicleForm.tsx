@@ -1,81 +1,146 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
 import * as BrandsStore from "../../store/adminAreaStore/BrandsStore";
 import * as TypesStore from "../../store/adminAreaStore/TypesStore";
 import {Button, Form, FormGroup, FormText, Input, Label} from "reactstrap";
+import {post} from "../../services/HttpClient"
+import {baseUrl} from "../../auth/helpers/constants";
+import {red} from "@material-ui/core/colors";
 
-type AddMyVehicleFormProps =
+type ParentProps = {
+    back: () => void
+}
+
+type ReduxProps =
 {
     types: TypesStore.TypesState
     brands: BrandsStore.BrandsState
-    getTypes: () => void
-    getBrands: () => void
-    getModels: (brandId: number) => void
-    getSubTypes: (typeId: number) => void
 }
 
+type Props = ParentProps &
+    ReduxProps
 
-const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
+const AddMyVehicleForm: React.FC<Props> = ({
+    back,
+    types,
+    brands,
+}) => {
   
-    const [selectedVehicleType, setSelectedVehicleType] = useState(props.types.vehicleType[0]);
-    const [selectedSubVehicleType, setSelectedSubVehicleType] = useState(null);
-    const [selectedBrand, setSelectedBrand] = useState(props.brands.brands[0]);
-    const [selectedSubBrand, setSelectedSubBrand] = useState(null);
-    
-    function handleSubmit(event: any){
-        event.preventDefault()
-        console.log(event)
-    }
+    const [selectedVehicleType, setSelectedVehicleType] = useState<TypesStore.Type>(types.vehicleType[0]);
+    const [selectedSubVehicleType, setSelectedSubVehicleType] = useState<TypesStore.SubType>(types.vehicleType[0].subTypes[0]);
+    const [selectedBrand, setSelectedBrand] = useState<BrandsStore.Brand>(brands.brands[0]);
+    const [selectedModel, setSelectedSubBrand] = useState<BrandsStore.Model>(brands.brands[0].models[0]);
+    const [nickname, setNickname] = useState('')
+    const [description, setDescription] = useState('')
+    const [image, setImage] = useState<File | null >(null)
+    const [error, setError] = useState('')
 
-    function handleChange(event: React.FormEvent<HTMLSelectElement>){
-        event.preventDefault();
-      //  setVehicleType(props.types.vehicleType[Number()]);
-        console.log(event.currentTarget.value);
+    async function handleSubmit(event: any){
+        event.preventDefault()
+        if( selectedVehicleType && 
+            selectedSubVehicleType && 
+            selectedBrand && 
+            selectedModel && 
+            nickname &&
+            description &&
+            image){
+            const data = new FormData();
+            data.append("nickname", nickname);
+            data.append("typeid", selectedVehicleType.id.toString());
+            data.append("subtypeid", selectedSubVehicleType.id.toString());
+            data.append("brandid", selectedBrand.id.toString());
+            data.append("modelid", selectedModel.id.toString());
+            data.append("description", description);
+            data.append("image", image);
+            const res  = await post('https://localhost:5009/api/vehicle/add', data )
+            
+            if(res.success){
+                back()
+                return
+            }
+            
+            if(res.statusCode! >= 500){
+                setError("Server is not respond")
+            }
+            else if(res.statusCode! >= 400){
+                setError("Incorrect input")
+            }
+            
+            return
+        }
+        
+        setError('Incorrect input')
     }
     
     function renderSelect(array: any){
         return array.map((el: any) =>
             <option value={el.id}>{el.name}</option>);
     }
-
-    useEffect(() =>{
-        props.getTypes();
-        props.getBrands();
-    })
-
+    
     function handleBrandSelect(event: React.ChangeEvent<HTMLInputElement>) {
-       const selectedBrand = props.brands.brands.find(brand => brand.id.toString() === event.target.value)
+       const selectedBrand = brands.brands.find(brand => brand.id.toString() === event.target.value)
         if(selectedBrand !== undefined) {
             setSelectedBrand(selectedBrand)
         }
     }
 
     function handleTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const selectedType = props.types.vehicleType.find(type => type.id.toString() === event.target.value)
+        const selectedType = types.vehicleType.find(type => type.id.toString() === event.target.value)
         if(selectedType !== undefined) {
             setSelectedVehicleType(selectedType)
         }
     }
 
+    function handleNickNameInput(event: React.ChangeEvent<HTMLInputElement>) {
+        setNickname(event.target.value)
+    }
+
+    function handleSubTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        const selectedSubType = selectedVehicleType.subTypes.find(subtype => subtype.id.toString() === event.target.value)
+        debugger
+
+        if(selectedSubType !== undefined) {
+            setSelectedSubVehicleType(prevState => selectedSubType)
+        }
+    }
+
+    function handleModelSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        const selectedModel = selectedBrand.models.find(model => model.id.toString() === event.target.value)
+
+        if(selectedModel !== undefined) {
+            setSelectedSubBrand(selectedModel)
+        }
+    }
+
+    function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setDescription(event.target.value)
+    }
+
+    function handleImageSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        //@ts-ignore
+        setImage(event.target.files[0])
+    }
+
     return (
         <Form onSubmit={handleSubmit}>
+            <p style={{'color': "red"}}>{error}</p>
             <FormGroup>
                 <Label for="vehicleName">Nickname</Label>
-                <Input type="text" name="text" id="vehicleName"/>
+                <Input type="text" name="text" id="vehicleName" onChange={handleNickNameInput}/>
             </FormGroup>
             <FormGroup>
                 <Label for="exampleSelect">Type</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleTypeSelect}>
-                    {props.types.vehicleType.map(type => (<option id={type.id.toString()} value={type.id}>{type.name}</option>))}
+                    {types.vehicleType.map(type => (<option id={type.id.toString()} value={type.id}>{type.name}</option>))}
                 </Input>
                 <Label for="exampleSelect">SubType</Label>
-                <Input type="select" name="select" id="exampleSelect">
+                <Input type="select" name="select" id="exampleSelect" onChange={handleSubTypeSelect}>
                     {
-                        props.types.vehicleType.map(type => {
+                        types.vehicleType.map(type => {
                             if(selectedVehicleType && type.id === selectedVehicleType.id){
                                 return type.subTypes.map(subType => (
-                                    <option id={subType.id.toString()}>{subType.name}</option>));
+                                    <option id={subType.id.toString()} value={subType.id}>{subType.name}</option>));
                             }
                         })
                     }
@@ -84,15 +149,15 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
             <FormGroup>
                 <Label for="exampleSelect">Brand</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleBrandSelect}>
-                    {props.brands.brands.map(brand => (<option id={brand.id.toString()} value={brand.id}>{brand.name}</option>))}
+                    {brands.brands.map(brand => (<option id={brand.id.toString()} value={brand.id}>{brand.name}</option>))}
                 </Input>
                 <Label for="exampleSelect">SubBrand</Label>
-                <Input type="select" name="select" id="exampleSelect">
+                <Input type="select" name="select" id="exampleSelect" onChange={handleModelSelect}>
                     {
-                            props.brands.brands.map(brand => {
+                            brands.brands.map(brand => {
                                 if(selectedBrand && brand.id === selectedBrand.id){
                                     return brand.models.map(model => (
-                                        <option id={model.id.toString()}>{model.name}</option>));
+                                        <option id={model.id.toString()} value={model.id}>{model.name}</option>));
                             }
                         })
                     }
@@ -100,14 +165,15 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
             </FormGroup>
             <FormGroup>
                 <Label for="exampleText">Description</Label>
-                <Input type="textarea" name="text" id="exampleText" />
+                <Input type="textarea" name="text" id="exampleText" onChange={handleDescriptionChange} />
             </FormGroup>
             <FormGroup>
                 <Label for="exampleFile">File</Label>
-                <Input type="file" name="file" id="exampleFile" accept="image/png, image/png, image/jpeg"/>
+                <Input type="file" name="file" id="exampleFile" accept="image/png, image/png, image/jpeg" onChange={handleImageSelect}/>
                 <FormText color="muted">
                     Select a photo
                 </FormText>
+                {image ? <img width={400}  src={URL.createObjectURL(image)}/> : null}
             </FormGroup>
             <Button>Submit</Button>
         </Form>
@@ -115,20 +181,13 @@ const AddMyVehicleForm = (props: AddMyVehicleFormProps) => {
 }
 
 
-let withConnect = connect(
+const withConnect = connect(
     (state: ApplicationState) => {
         return {
             types: state.types,
             brands: state.brands
         };
-    },
-    {
-        getBrands: BrandsStore.actionCreators.getBrands,
-        geModels: BrandsStore.actionCreators.getModels,
-        getTypes: TypesStore.actionCreators.getTypes,
-        getSubTypes: TypesStore.actionCreators.getSubType
     }
-    
-)(AddMyVehicleForm as any)
+)(AddMyVehicleForm)
 
 export default withConnect;

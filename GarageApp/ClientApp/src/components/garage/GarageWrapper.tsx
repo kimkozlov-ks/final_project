@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import MyGarage from "./MyGarage";
 import AddMyVehicleForm from "./AddMyVehicleForm";
+import {Button} from "reactstrap";
 
 type GarageWrapperProps = {};
 
@@ -13,19 +14,19 @@ enum GarageState
 function GarageWrapper(props: GarageWrapperProps) {
 
     const [state, setState] = useState(GarageState.MY_GARAGE);
-
     function redrerSwitch()
     {
         switch (state) {
             case GarageState.MY_GARAGE:
                 return<>
-                    <button onClick={() => setState(GarageState.ADD)}>Add vehicle</button>
+                    <Button onClick={() => setState(GarageState.ADD)}>Add my vehicle</Button>
                     <MyGarage/>
                 </>
             case GarageState.ADD:
+               
                 return <>
-                    <button onClick={() => setState(GarageState.MY_GARAGE)}>BACK to my garage</button>
-                    <AddMyVehicleForm/>
+                    <Button onClick={() => setState(GarageState.MY_GARAGE)} >← Back</Button>
+                    <AddMyVehicleForm back={() => setState(GarageState.MY_GARAGE)}/>
                 </>
             default:
                 return <div>MY_GARAGE</div>

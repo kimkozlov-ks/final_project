@@ -11,16 +11,26 @@ import AdminArea from "./components/admin/AdminArea";
 import GarageWrapper from "./components/garage/GarageWrapper";
 import {useEffect} from "react";
 import * as AuthStore from "./auth/AuthStore";
+import * as TypesStore from "../src/store/adminAreaStore/TypesStore"
+import * as BrandsStore from "../src/store/adminAreaStore/BrandsStore"
 import {connect} from "react-redux";
+
+type ReduxProps = {
+    getTypes: () => void
+    getBrands: () => void
+    loginFromStorage: () => void
+}
 
 type AppProps =
     AuthStore.AuthState &
-    typeof AuthStore.actionCreators
+    ReduxProps
 
 const App: React.FC<AppProps> = (props: AppProps) => {
     
     useEffect(() =>{
         props.loginFromStorage()
+        props.getTypes();
+        props.getBrands();
     })
     
     return (
@@ -37,5 +47,14 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     )
 }
 
-export default connect(state => {},  AuthStore.actionCreators)(App as any)
+const mapActionsToProps = {
+    loginFromStorage: AuthStore.actionCreators.loginFromStorage,
+    getTypes: TypesStore.actionCreators.getTypes,
+    getBrands: BrandsStore.actionCreators.getBrands,
+}
+
+export default connect(
+    state => {},
+    mapActionsToProps
+)(App as any)
 
