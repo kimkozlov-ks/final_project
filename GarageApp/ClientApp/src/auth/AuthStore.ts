@@ -3,6 +3,8 @@ import UserInfo from "../store/UserInfo";
 import  AuthService from "./AuthService"
 import {decodeToken} from "react-jwt";
 import {AppThunkAction} from "../store";
+import {ACCESS_TOKEN_KEY} from "./helpers/constants";
+import moment from 'moment'
 
 export interface AuthState{
     loggedIn: boolean;
@@ -24,9 +26,26 @@ const emptyState: AuthState = {
 };
 
 export const actionCreators = {
+    loginFromStorage: (): AppThunkAction<KnownAction> => async (dispatch) => {
+        const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
+        if (accessToken) {
+            const user = decodeToken(accessToken);
+            
+            if(user && user.exp <= moment().unix()){
+                const result = await AuthService.refresh();
+
+                if(!result.success){
+                    return
+                }
+            }
+            dispatch({type: 'LOGIN', user: user} as LoginAction)
+            return
+        }
+    },
+    
     login: (username: string, password: string): AppThunkAction<KnownAction> => async (dispatch) => {
         const result = await AuthService.login(username, password);
-        
+        debugger
         return result.success
             ? dispatch({type: 'LOGIN', user: decodeToken(result.body!)} as LoginAction)
             : dispatch({type: 'LOGIN_FAIL', errorMessage: result.err} as LoginFailAction);
@@ -45,7 +64,6 @@ export const actionCreators = {
             ? dispatch({type: 'LOGOUT'} as LogoutAction)
             : dispatch({type: 'LOGOUT_FAIL', errorMessage: result.err} as LogoutFailAction);
     }
-    
 };
 
 export const reducer: Reducer<AuthState> = (state: AuthState = emptyState, incomingAction: Action): AuthState => {

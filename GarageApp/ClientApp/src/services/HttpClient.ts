@@ -1,3 +1,6 @@
+import {authHeader} from "../auth/helpers/auth-header";
+import {handleResponse} from "../auth/helpers/handle-response";
+
 interface Response {
     success: boolean,
     err?: string,
@@ -5,10 +8,13 @@ interface Response {
 }
 
 export async function get(url: string) : Promise<Response> {
-    try {  
-        const res = await fetch(url, {
+    try {
+        const header = {
             method: 'GET',
-        }) ;
+            headers: authHeader()
+        }
+        console.log(header);
+        const res = await fetch(url, header) ;
 
         if(res.status != 200)
         {
@@ -27,8 +33,8 @@ export async function post(url: string, body: string, headers: any) : Promise<Re
     try {  
         const res = await fetch(url, {
             method: 'POST',
-            headers: headers,
-            body: body
+            headers: {...headers, ...authHeader()},
+            body: body,
         });
 
         if(res.status != 200)
@@ -48,7 +54,7 @@ export async function put(url: string, body: string, headers: any) {
     try {
         const res = await fetch(url, {
             method: 'PUT',
-            headers: headers,
+            headers: {...headers, ...authHeader()},
             body: body
         });
 
