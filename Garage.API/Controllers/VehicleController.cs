@@ -29,8 +29,10 @@ namespace Garage.API.Controllers
         public async Task<ActionResult<VehicleDto>> AddVehicle([FromForm] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
+
+            await _vehicleService.Add(vehicleDto);
             
-            return Ok(await _vehicleService.Add(vehicleDto));
+            return Ok();
         }
 
     }

@@ -32,21 +32,23 @@ export async function get(url: string) : Promise<Response> {
 
 export async function post(url: string, body: string | FormData, headers?: any) : Promise<Response> {
     try {  
-        debugger
         const res = await fetch(url, {
             method: 'POST',
             headers: {...headers, ...authHeader()},
             body: body,
         });
-
         if(res.status != 200)
         {
             return {success: false, err: `Status code ${res.status}`, statusCode: res.status};
         }
+        debugger
         
-        const data = await res.json();
-        
-        return {success: true, body: data};
+        if(res.bodyUsed){
+            const data = await res.json();
+            return {success: true, body: data};
+        }
+
+        return {success: true} 
     } catch (err) {
         return {success: false, err: "Exception: " + err };
     }

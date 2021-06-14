@@ -1,9 +1,12 @@
+using Garage.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Garage.Data
 {
     public class VehicleDbContext: DbContext
     {
+        public DbSet<VehicleEntity> Vehicles { get; set; }
+        
         public VehicleDbContext(DbContextOptions options) : base(options) { }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

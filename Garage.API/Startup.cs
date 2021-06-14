@@ -52,6 +52,7 @@ namespace Garage.API
             JwtSetup.Setup(services);
             services.AddTransient<VehicleRepository>();
             services.AddTransient<VehicleService>();
+            services.AddSingleton<ImageService>();
 
             var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile.MappingProfile()); });
 
@@ -82,6 +83,8 @@ namespace Garage.API
 
             app.UseRouting();
 
+            app.UseStaticFiles();
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

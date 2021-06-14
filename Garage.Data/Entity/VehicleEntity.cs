@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Garage.Data.Entity
@@ -20,8 +21,11 @@ namespace Garage.Data.Entity
         [ForeignKey("TransportModel")]
         public int ModelId { get; set; }
         
-        public string Info { get; set; }
+        public string Description { get; set; }
         
-        public string ImageUrl { get; set; }
+        public string Image { get; set; }
+        
+        public DateTime CreateDate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

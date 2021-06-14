@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Garage.API.dto;
 using Garage.Data.Entity;
@@ -9,9 +10,16 @@ namespace Garage.API.Mappers
     {
         public class MappingProfile: Profile
         {
-            public MappingProfile() 
+            public MappingProfile()
             {
-                CreateMap<VehicleDto, VehicleEntity>();
+                CreateMap<VehicleDto, VehicleEntity>()
+                    .ForMember(dest =>
+                        dest.IsActive, opt => opt.MapFrom(src => true))
+                    .ForMember(dest =>
+                        dest.Image, opt => opt.MapFrom((src, dst, _, context) => context.Options.Items["image"]
+                    ))
+                    .ForMember(dest =>
+                        dest.CreateDate, opt => opt.MapFrom(src => DateTime.UtcNow));
                 CreateMap<VehicleEntity, VehicleDto>();
             }
         }
