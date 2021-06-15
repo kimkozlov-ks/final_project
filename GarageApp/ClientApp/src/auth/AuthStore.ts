@@ -35,6 +35,8 @@ export const actionCreators = {
                 const result = await AuthService.refresh();
 
                 if(!result.success){
+                    localStorage.setItem(ACCESS_TOKEN_KEY, '')
+                    dispatch({type: 'LOGOUT'} as LogoutAction)
                     return
                 }
             }
