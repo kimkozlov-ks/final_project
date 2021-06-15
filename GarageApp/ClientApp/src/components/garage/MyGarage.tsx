@@ -11,6 +11,7 @@ const MyGarage = () => {
     return (
         <VehicleList 
             pageUrl={'garage/#'}
+            isVoteEnabled={false}
             baseUrl={process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/my'}/>
     )
 }

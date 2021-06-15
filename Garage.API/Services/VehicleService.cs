@@ -30,11 +30,11 @@ namespace Garage.API.Services
             _bestVehiclesRepository = bestVehiclesRepository;
         }
 
-        public async Task<AddVehicleDto> GetVehicleById(int id)
+        public async Task<SendVehicleDto> GetVehicleById(int id)
         {
             var vehicle = await _vehicleRepository.Get(id);
 
-            return _mapper.Map<AddVehicleDto>(vehicle);
+            return _mapper.Map<SendVehicleDto>(vehicle);
 
         }
 

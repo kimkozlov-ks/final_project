@@ -32,7 +32,7 @@ namespace Garage.API.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<AddVehicleDto>> GetById([FromRoute] int id)
+        public async Task<ActionResult<SendVehicleDto>> GetById([FromRoute] int id)
         {
             return await _vehicleService.GetVehicleById(id);
         }

@@ -7,6 +7,7 @@ import './custom.css'
 import LoginForm from "./auth/LoginForm";
 import Logout from "./auth/Logout";
 import Register from "./auth/RegisterForm";
+import VehicleFull from "./components/lib/VehicleFull";
 import AdminArea from "./components/admin/AdminArea";
 import GarageWrapper from "./components/garage/GarageWrapper";
 import HomeWrapper from "./components/home/HomeWrapper";
@@ -43,6 +44,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 <Route exact path='/login-form' component={LoginForm} />
                 <Route exact path='/logout' component={Logout} />
                 <Route exact path='/register' component={Register} />
+                <Route exact path='/vehicle' component={VehicleFull} />
             </Layout>
         </CookiesProvider>
     )

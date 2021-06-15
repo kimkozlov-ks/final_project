@@ -4,6 +4,9 @@ import {post} from "../../services/HttpClient";
 import {Vote, Vehicle} from "../../helpers/interface";
 import moment from "moment";
 import {Redirect} from "react-router";
+import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import { actionCreators}  from "../../store/VehicleStore";
 
 type VehicleProps = {
     vehicle: Vehicle
@@ -11,11 +14,16 @@ type VehicleProps = {
     isVoteEnabled: boolean
 };
 
+type ReduxProps = typeof actionCreators
 
-const VehicleCard: React.FC<VehicleProps> = ({
+type Props = ReduxProps &
+    VehicleProps
+
+const VehicleCard: React.FC<Props> = ({
     vehicle, 
     incrementRating,
-    isVoteEnabled
+    isVoteEnabled,
+    setActiveVehicleId
  }) => {
     
     const[isVoteDisabled, switchVote] = useState(false)
@@ -45,8 +53,9 @@ const VehicleCard: React.FC<VehicleProps> = ({
         }
     }
 
+
     function handleReadMore() {
-        
+        setActiveVehicleId(vehicle.id)
     }
 
     return (
@@ -58,7 +67,9 @@ const VehicleCard: React.FC<VehicleProps> = ({
                 <CardText>Create Date: { 
                     moment(vehicle.createDate).format('MMMM Do YYYY, h:mm')}</CardText>
             </CardBody>
-            <Button block onClick={handleReadMore}>Read more</Button>
+            <Link to="/vehicle" onClick={handleReadMore} >
+                Read more
+            </Link>
             {
                 isVoteEnabled 
                     ?  <Button block disabled={isVoteDisabled} onClick={handleVote}>Vote</Button> 
@@ -68,4 +79,11 @@ const VehicleCard: React.FC<VehicleProps> = ({
     )
 }
 
-export default VehicleCard;
+export default connect(
+    () => {},
+    {
+        setActiveVehicleId: actionCreators.setActiveVehicleId
+    }
+)(VehicleCard as any)
+
+

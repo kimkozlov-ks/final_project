@@ -7,6 +7,7 @@ import {Container, Pagination, PaginationItem, PaginationLink, Row} from "reacts
 type Props = {
     baseUrl: string
     pageUrl?: string
+    isVoteEnabled: boolean
 }
 
 const emptyPage: VehiclePage = {
@@ -19,7 +20,11 @@ const emptyPage: VehiclePage = {
     }
 }
 
-const VehicleList: React.FC<Props> = ({baseUrl, pageUrl}) => {
+const VehicleList: React.FC<Props> = ({
+    baseUrl, 
+    pageUrl,
+    isVoteEnabled
+}) => {
     
     const [page, setPage] = useState<VehiclePage>(emptyPage)
     const [pageNumber, setPageNumber] = useState(1)
@@ -38,9 +43,9 @@ const VehicleList: React.FC<Props> = ({baseUrl, pageUrl}) => {
     }, [pageNumber])
 
     function render() {
-        return page.vehicles.map(vehicle => 
-            <VehicleCard 
-                isVoteEnabled={true} 
+        // @ts-ignore
+        return page.vehicles.map(vehicle => <VehicleCard 
+                isVoteEnabled={isVoteEnabled} 
                 incrementRating={() => setPageNumber(pageNumber)} 
                 vehicle={vehicle}
             /> )
