@@ -1,5 +1,3 @@
-import {Vehicle} from "../components/garage/interface";
-
 export interface VehiclePage {
     "vehicles": Vehicle[]
     "pageViewModel": {
@@ -13,4 +11,17 @@ export interface VehiclePage {
 export interface Vote {
     power: number,
     vehicleId: string
+}
+
+export interface Vehicle {
+    id: string
+    nickname: string
+    typeId: number
+    subTypeId: number
+    brandId: number
+    modelId: number
+    description: string
+    image: string
+    createDate: string
+    rating: number
 }

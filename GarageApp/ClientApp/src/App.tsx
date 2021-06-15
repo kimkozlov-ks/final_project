@@ -39,7 +39,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <Layout>
                 <Route exact path='/' component={HomeWrapper} />
                 <Route path='/adminArea' component={AdminArea} />
-                <Route path='/garage' component={GarageWrapper} />
+                <Route path='/garage/' component={GarageWrapper} />
                 <Route exact path='/login-form' component={LoginForm} />
                 <Route exact path='/logout' component={Logout} />
                 <Route exact path='/register' component={Register} />

@@ -37,13 +37,15 @@ namespace Garage.API.Controllers
         }
         
         [HttpGet("my")]
-        public async Task<ActionResult<List<SendVehicleDto>>> GetByUserId()
+        public async Task<ActionResult<List<SendVehicleDto>>> GetByUserId([FromQuery] int page, int size)
         {    
             var userId = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value; 
             
-            return Ok(await _vehicleService.GetUserVehicle(userId));
+            var pageView =  await _vehicleService.GetUserVehicle(userId, page, size);
+            
+            return Ok(pageView);
         }
         
         [HttpPost("add")] 

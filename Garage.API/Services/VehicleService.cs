@@ -46,14 +46,21 @@ namespace Garage.API.Services
             return addVehicleDto;
         }
 
-        public async Task<List<SendVehicleDto>> GetUserVehicle(string userId)
+        public async  Task<VehicleViewModel> GetUserVehicle(string userId, int page, int size)
         {
             var userVehicles = await _vehicleRepository.GetUserVehicles(int.Parse(userId));
 
             var sendVehicleDtos = userVehicles.Select(v => 
                 _mapper.Map<SendVehicleDto>(v)).ToList();
 
-            return sendVehicleDtos;
+            PageViewModel pageViewModel = new PageViewModel(sendVehicleDtos.Count(), page, size);
+            VehicleViewModel viewModel = new VehicleViewModel
+            {
+                PageViewModel = pageViewModel,
+                Vehicles = sendVehicleDtos.Skip((page - 1) * size).Take(size).ToList()
+            };
+
+            return viewModel;
         }
 
         public async Task<VehicleViewModel> GetVehicles(int page, int size)

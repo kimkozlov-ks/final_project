@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {Vehicle} from "./interface";
 import {Card, CardBody, CardImg, CardText, CardTitle, Button, Toast} from "reactstrap";
 import {post} from "../../services/HttpClient";
-import {Vote} from "../../helpers/interface";
+import {Vote, Vehicle} from "../../helpers/interface";
 import moment from "moment";
 
 type VehicleProps = {
     vehicle: Vehicle
     incrementRating?: () => void
+    isVoteEnabled: boolean
 };
 
 
 const VehicleCard: React.FC<VehicleProps> = ({
     vehicle, 
-    incrementRating
+    incrementRating,
+    isVoteEnabled
  }) => {
     
     const[isVoteDisabled, switchVote] = useState(false)
@@ -57,7 +58,11 @@ const VehicleCard: React.FC<VehicleProps> = ({
                 <CardText>Create Date: { 
                     moment(vehicle.createDate).format('MMMM Do YYYY, h:mm')}</CardText>
             </CardBody>
-            <Button disabled={isVoteDisabled} onClick={handleVote}>Vote</Button>
+            {
+                isVoteEnabled 
+                    ?  <Button disabled={isVoteDisabled} onClick={handleVote}>Vote</Button> 
+                    : null 
+            }
         </Card>
     )
 }

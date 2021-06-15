@@ -1,11 +1,11 @@
 import React from 'react'
 import VehicleList from "./VehiclesList";
+import {get} from "../../services/HttpClient";
 
 const HomeWrapper: React.FC<{}> = () => {
-    
     return (
         <>
-            <VehicleList>
+            <VehicleList baseUrl={process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle'}>
             </VehicleList>
         </>
     )

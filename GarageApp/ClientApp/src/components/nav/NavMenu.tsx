@@ -31,7 +31,7 @@ class NavMenu extends React.PureComponent<Props, { isOpen: boolean }> {
                                     <NavLink tag={Link} className="text-dark" to="/adminArea">AdminArea</NavLink>
                                 </NavItem> 
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/garage">Garage</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/garage/">Garage</NavLink>
                                 </NavItem>
                                 {
                                     !this.props.loggedIn 
