@@ -13,7 +13,6 @@ const MyGarage = () => {
     useEffect(() =>  {
         async function fetchVehicles() {
             const result = await get(process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/my');
-            debugger
             if(result.success){
                 setVehicles(result.body)
             }

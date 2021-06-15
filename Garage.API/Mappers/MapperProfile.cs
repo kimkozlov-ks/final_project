@@ -30,6 +30,15 @@ namespace Garage.API.Mappers
                             context.Options.Items["userId"]
                         ));
                 CreateMap<VehicleEntity, SendVehicleDto>();
+                CreateMap<VoteDto, VoteEntity>()
+                    .ForMember(dest =>
+                        dest.VoteTime, opt =>
+                        opt.MapFrom(src => DateTime.UtcNow))
+                    .ForMember(dest =>
+                        dest.UserId, opt =>
+                        opt.MapFrom((src, dst, _, context) =>
+                            context.Options.Items["userId"]
+                        ));
             }
         }
     }

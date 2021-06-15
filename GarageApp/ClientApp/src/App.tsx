@@ -9,6 +9,7 @@ import Logout from "./auth/Logout";
 import Register from "./auth/RegisterForm";
 import AdminArea from "./components/admin/AdminArea";
 import GarageWrapper from "./components/garage/GarageWrapper";
+import HomeWrapper from "./components/home/HomeWrapper";
 import {useEffect} from "react";
 import * as AuthStore from "./auth/AuthStore";
 import * as TypesStore from "../src/store/adminAreaStore/TypesStore"
@@ -36,7 +37,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     return (
         <CookiesProvider>
             <Layout>
-                <Route exact path='/' component={Home} />
+                <Route exact path='/' component={HomeWrapper} />
                 <Route path='/adminArea' component={AdminArea} />
                 <Route path='/garage' component={GarageWrapper} />
                 <Route exact path='/login-form' component={LoginForm} />

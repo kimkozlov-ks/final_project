@@ -24,5 +24,7 @@ namespace Garage.API.dto
         public string Image { get; set; }
         [Required]
         public DateTime CreateDate { get; set; }
+        [Required]
+        public int Rating { get; set; }
     }
 }

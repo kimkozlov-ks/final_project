@@ -54,6 +54,8 @@ namespace Garage.API
             JwtSetup.Setup(services);
             services.AddTransient<VehicleRepository>();
             services.AddTransient<VehicleService>();
+            services.AddTransient<VoteService>();
+            services.AddTransient<VoteRepository>();
             services.AddSingleton<ImageService>();
 
             var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile.MappingProfile()); });

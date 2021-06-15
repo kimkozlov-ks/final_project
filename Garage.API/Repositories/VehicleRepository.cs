@@ -28,7 +28,8 @@ namespace Garage.API.Repositories
 
         public async Task<List<VehicleEntity>> GetPage(int page, int size)
         {
-            return await GetDbContext().Vehicles.Skip((page - 1) * size).Take(size).ToListAsync();
+            return await GetDbContext().Vehicles.OrderBy(v => v.CreateDate). 
+                Skip((page - 1) * size).Take(size).ToListAsync();
         }
     }
 }

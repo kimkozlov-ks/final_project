@@ -7,6 +7,7 @@ namespace Garage.Data.Entity
     {
         public int Id { get; set; }
         
+        [ForeignKey("Users")]
         public int OwnerUserId { get; set; }
         
         public string Nickname { get; set;  }
@@ -29,5 +30,7 @@ namespace Garage.Data.Entity
         
         public DateTime CreateDate { get; set; }
         public bool IsActive { get; set; }
+        
+        public int Rating { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.API.Controllers
 {    
     [ApiController]
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class VehicleController : Controller
     {    

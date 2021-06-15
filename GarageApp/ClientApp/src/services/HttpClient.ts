@@ -14,8 +14,8 @@ export async function get(url: string) : Promise<Response> {
             method: 'GET',
             headers: authHeader()
         }
-        console.log(header);
         const res = await fetch(url, header) ;
+
         if(res.status != 200)
         {
             return {success: false};
@@ -36,6 +36,7 @@ export async function post(url: string, body: string | FormData, headers?: any) 
             headers: {...headers, ...authHeader()},
             body: body,
         });
+
         if(res.status != 200)
         {
             return {success: false, err: `Status code ${res.status}`, statusCode: res.status};

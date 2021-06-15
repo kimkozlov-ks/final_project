@@ -8,4 +8,5 @@ export interface Vehicle {
     description: string
     image: string
     createDate: string
+    rating: number
 }
