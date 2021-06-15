@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entities.Class.Entities.GarageEntities;
 using Garage.Data;
-using Garage.Data.Entity;
 using Infrastructure.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 

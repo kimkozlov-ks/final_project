@@ -1,4 +1,4 @@
-using Garage.Types.Data.Model;
+using Entities.Class.Entities.TypesEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Garage.Types.Data

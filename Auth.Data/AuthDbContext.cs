@@ -1,3 +1,4 @@
+using Entities.Class.Entities.AuthEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Data

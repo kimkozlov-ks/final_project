@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Entities.Class.Entities.GarageEntities;
 using Garage.API.dto;
 using Garage.API.Models;
 using Garage.API.Repositories;
-using Garage.Data.Entity;
 using Infrastructure.Data.Pageable;
 using Microsoft.AspNetCore.Mvc;
 

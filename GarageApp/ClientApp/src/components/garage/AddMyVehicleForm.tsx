@@ -47,14 +47,14 @@ const AddMyVehicleForm: React.FC<Props> = ({
             image){
             const data = new FormData();
             data.append("nickname", nickname);
-            data.append("typeid", selectedVehicleType.id.toString());
-            data.append("subtypeid", selectedSubVehicleType.id.toString());
-            data.append("brandid", selectedBrand.id.toString());
-            data.append("modelid", selectedModel.id.toString());
+            data.append("transporttypeid", selectedVehicleType.id.toString());
+            data.append("transportsubtypeid", selectedSubVehicleType.id.toString());
+            data.append("transportbrandid", selectedBrand.id.toString());
+            data.append("transportmodelid", selectedModel.id.toString());
             data.append("description", description);
             data.append("image", image);
             const res  = await post( process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/add', data )
-            
+            debugger
             if(res.success){
                 back()
                 return

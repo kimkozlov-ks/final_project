@@ -1,8 +1,7 @@
 using System;
 using AutoMapper;
+using Entities.Class.Entities.GarageEntities;
 using Garage.API.dto;
-using Garage.Data.Entity;
-using Garage.Types.Data.Model;
 
 namespace Garage.API.Mappers
 {
@@ -25,7 +24,7 @@ namespace Garage.API.Mappers
                         dest.CreateDate, opt =>
                         opt.MapFrom(src => DateTime.UtcNow))
                     .ForMember(dest =>
-                        dest.OwnerUserId, opt =>
+                        dest.UserId, opt =>
                         opt.MapFrom((src, dst, _, context) =>
                             context.Options.Items["userId"]
                         ));

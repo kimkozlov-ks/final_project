@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Auth.API.Model;
 using Auth.Data;
+using Entities.Class.Entities.AuthEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,7 @@
 using System.Linq;
 using AutoMapper;
+using Entities.Class.Entities.TypesEntities;
 using Garage.Types.API.Dto;
-using Garage.Types.Data.Model;
 using Microsoft.AspNetCore.Routing;
 
 namespace Garage.Types.API.Mapper

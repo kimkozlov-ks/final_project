@@ -10,7 +10,6 @@ using Garage.API.Repositories;
 using Garage.API.Services;
 using Garage.API.Workers;
 using Garage.Data;
-using Garage.Data.Entity;
 using Garage.Types.Data;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Entities.Class.Entities.TypesEntities;
 using Garage.Types.API.Dto;
 using Garage.Types.API.Repositories;
-using Garage.Types.Data.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Garage.Types.API.Services

@@ -1,6 +1,6 @@
 using System.Linq;
+using Entities.Class.Entities.GarageEntities;
 using Garage.Data;
-using Garage.Data.Entity;
 using Infrastructure.Data.Repository;
 
 namespace Garage.API.Repositories

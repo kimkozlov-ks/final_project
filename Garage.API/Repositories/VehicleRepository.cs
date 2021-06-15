@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entities.Class.Entities.GarageEntities;
 using Garage.Data;
-using Garage.Data.Entity;
 using Garage.Types.Data;
-using Garage.Types.Data.Model;
 using Infrastructure.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,7 @@ namespace Garage.API.Repositories
 
         public async Task<List<VehicleEntity>> GetUserVehicles(int userId)
         {
-            return await GetDbContext().Vehicles.Where(v => v.OwnerUserId == userId).ToListAsync();
+            return await GetDbContext().Vehicles.Where(v => v.UserId == userId).ToListAsync();
         }
 
         public int Count()

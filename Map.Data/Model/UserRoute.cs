@@ -1,4 +1,5 @@
 using Auth.Data;
+using Entities.Class.Entities.AuthEntities;
 using Infrastructure.Data;
 
 namespace Map.API.Model

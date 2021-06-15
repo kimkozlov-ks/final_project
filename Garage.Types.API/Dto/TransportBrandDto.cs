@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Garage.Types.Data.Model;
 
 namespace Garage.Types.API.Dto
 {
