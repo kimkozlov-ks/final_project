@@ -11,7 +11,7 @@ type VehicleProps = {
 };
 
 
-const VehicleFC: React.FC<VehicleProps> = ({
+const VehicleCard: React.FC<VehicleProps> = ({
     vehicle, 
     incrementRating
  }) => {
@@ -62,4 +62,4 @@ const VehicleFC: React.FC<VehicleProps> = ({
     )
 }
 
-export default VehicleFC;
+export default VehicleCard;
