@@ -52,10 +52,9 @@ const VehicleCard: React.FC<Props> = ({
             setRatingIncrement(ratingIncrement + 1)
         }
     }
-
-
-    function handleReadMore() {
-        setActiveVehicleId(vehicle.id)
+    
+    function getPath() {
+        return `/vehicle/${vehicle.id}`
     }
 
     return (
@@ -67,7 +66,7 @@ const VehicleCard: React.FC<Props> = ({
                 <CardText>Create Date: { 
                     moment(vehicle.createDate).format('MMMM Do YYYY, h:mm')}</CardText>
             </CardBody>
-            <Link to="/vehicle" onClick={handleReadMore} >
+            <Link to={getPath} >
                 Read more
             </Link>
             {

@@ -3,22 +3,21 @@ import {Vehicle} from "../../helpers/interface";
 import {get} from "../../services/HttpClient";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
-
-type Props = {
-    id: string
-}
+import {Label} from "reactstrap";
+import {useLocation, useParams} from "react-router";
 
 
-const VehicleFull: React.FC<Props> = ({
-   id
+
+const VehicleFull: React.FC<{}> = ({
 }) => {
+    // @ts-ignore
+    const id = useParams()['id']
     
     const [vehicle, setVehicle] = useState<Vehicle | null>(null)
 
     async function fetchVehicle() {
        const url = process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/' + id
         const result = await get(url);
-        debugger
         if(result.success){
             setVehicle(result.body)
         }
@@ -26,22 +25,28 @@ const VehicleFull: React.FC<Props> = ({
     
     useEffect(()=>{
         fetchVehicle().catch()
-    },[])
+    })
 
     function renderData() {
-        return <img src={vehicle!.image}/>;
+        return(
+        <>
+            <img style={{width: '100%'}} src={vehicle!.image}/>
+            <Label>
+                <h3>
+                    Nickname: {vehicle!.nickname}
+                </h3>
+            </Label>
+        </>
+        )
     }
 
     return(
         <>
             {
-                vehicle ? renderData() : null
+                vehicle != null ? renderData() : null
             }
         </>
     )
 }
 
-
-export default connect((state: ApplicationState) => {
-    return  {id: state.vehicles.activeVehicleId}
-})(VehicleFull as any)
+export default VehicleFull

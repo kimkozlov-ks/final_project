@@ -44,7 +44,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 <Route exact path='/login-form' component={LoginForm} />
                 <Route exact path='/logout' component={Logout} />
                 <Route exact path='/register' component={Register} />
-                <Route exact path='/vehicle' component={VehicleFull} />
+                <Route exact path='/vehicle/:id' component={VehicleFull} />
             </Layout>
         </CookiesProvider>
     )
