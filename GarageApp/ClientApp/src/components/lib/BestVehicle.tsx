@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Card,
     CardBody,
@@ -10,16 +10,26 @@ import {
     CarouselItem
 } from "reactstrap";
 import {Vehicle} from "../../helpers/interface";
+import {get} from "../../services/HttpClient";
 
 const BestVehicle: React.FC<{}> = () => {
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [animating, setAnimating] = useState(false);
     const [items, setItems] = useState([])
+
+    async function fetchBestVehicles() {
+        const url = process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/best'
+        const result = await get(url);
+        debugger
+        if(result.success){
+            setItems(result.body)
+        }
+    }
     
-    useState(() =>{
-        
-    })
+    useEffect(() =>{
+        fetchBestVehicles().then().catch()
+    }, [])
 
     const next = () => {
         if (animating) return;
@@ -47,7 +57,8 @@ const BestVehicle: React.FC<{}> = () => {
                 onExiting={() => setAnimating(true)}
                 onExited={() => setAnimating(false)}
             >
-                <CarouselCaption className="text-danger" captionText={vehicle.nickname} captionHeader={'test'} />
+                <img style={{'width': '100%', opacity: '75%'}} src={vehicle.image} alt={vehicle.nickname} />
+                <CarouselCaption className="text-danger" captionText={vehicle.nickname} captionHeader={'Best Yesterday'} />
             </CarouselItem>
         );
     });
@@ -59,7 +70,6 @@ const BestVehicle: React.FC<{}> = () => {
                     `.custom-tag {
               max-width: 100%;
               height: 500px;
-              background: black;
             }`
                 }
             </style>

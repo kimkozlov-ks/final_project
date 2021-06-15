@@ -2,6 +2,7 @@ using System;
 using AutoMapper;
 using Entities.Class.Entities.GarageEntities;
 using Garage.API.dto;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Garage.API.Mappers
 {
@@ -37,7 +38,9 @@ namespace Garage.API.Mappers
                         dest.UserId, opt =>
                         opt.MapFrom((src, dst, _, context) =>
                             context.Options.Items["userId"]
-                        ));
+                        ))
+                    .ForMember(dest =>
+                        dest.VehicleEntityId, opt => opt.MapFrom(src => src.VehicleId));
                 CreateMap<VehicleEntity, BestVehicleEntity>()
                     .ForMember(dest =>
                         dest.VehicleEntityId, opt =>
@@ -48,6 +51,7 @@ namespace Garage.API.Mappers
                     .ForMember(dest => 
                         dest.Id, opt => 
                             opt.Ignore());
+                
 
             }
         }

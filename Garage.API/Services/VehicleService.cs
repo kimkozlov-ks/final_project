@@ -94,7 +94,7 @@ namespace Garage.API.Services
             List<SendVehicleDto> sendVehicleDtos = new List<SendVehicleDto>();
             foreach (var bestVehicle in bestVehicles)
             {
-                sendVehicleDtos.Add(_mapper.Map<SendVehicleDto>(bestVehicle));
+                sendVehicleDtos.Add(_mapper.Map<SendVehicleDto>(bestVehicle.VehicleEntity));
             }
 
             return sendVehicleDtos;

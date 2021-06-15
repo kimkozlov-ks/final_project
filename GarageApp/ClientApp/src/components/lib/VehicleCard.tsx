@@ -50,15 +50,10 @@ const VehicleCard: React.FC<VehicleProps> = ({
     }
 
     return (
-        <Card style={{'width': '30%', 'height': '500px' }}>
+        <Card style={{'width': '31%', 'height': '500px', margin: '10px'}}>
             <CardImg top height="40%" src={vehicle.image} alt="vehibcle image"  />
             <CardBody >
                 <CardTitle tag="h5">{vehicle.nickname}</CardTitle>
-                
-                <CardText>Info: {vehicle.description}</CardText>
-                {/*<CardText>*/}
-                {/*    <small className="text-muted">{vehicle.}</small>*/}
-                {/*</CardText>*/}
                 <CardText>Rating: {vehicle.rating + ratingIncrement}</CardText>
                 <CardText>Create Date: { 
                     moment(vehicle.createDate).format('MMMM Do YYYY, h:mm')}</CardText>
