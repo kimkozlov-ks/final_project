@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.API.Controllers
 {    
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class VehicleController : Controller
     {    
@@ -21,7 +20,8 @@ namespace Garage.API.Controllers
         {
             _vehicleService = vehicleService;
         }
-
+        
+        [Authorize]
         [HttpGet("")]
         public async Task<ActionResult<VehicleViewModel>> GetById([FromQuery] int page, int size)
         {
@@ -30,12 +30,14 @@ namespace Garage.API.Controllers
             return Ok(pageView);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AddVehicleDto>> GetById([FromRoute] int id)
         {
             return await _vehicleService.GetVehicleById(id);
         }
         
+        [Authorize]
         [HttpGet("my")]
         public async Task<ActionResult<List<SendVehicleDto>>> GetByUserId([FromQuery] int page, int size)
         {    
@@ -48,6 +50,16 @@ namespace Garage.API.Controllers
             return Ok(pageView);
         }
         
+        [HttpGet("best")]
+        public async Task<ActionResult<List<SendVehicleDto>>> GetBestOfTheDay()
+        {
+
+            var bestVehiclesOfTheDay = await _vehicleService.GetBestVehiclesOfTheDay();
+            
+            return Ok(bestVehiclesOfTheDay);
+        }
+        
+        [Authorize]
         [HttpPost("add")] 
         public async Task<ActionResult<AddVehicleDto>> AddVehicle([FromForm] AddVehicleDto addVehicleDto)
         {

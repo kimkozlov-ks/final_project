@@ -16,11 +16,18 @@ namespace Garage.API.Services
         private readonly VehicleRepository _vehicleRepository;
         private readonly IMapper _mapper;
         private readonly ImageService _imageSaver;
-        public VehicleService(IMapper mapper, VehicleRepository transportModelRepository, ImageService imageSaver)
+        private readonly BestVehiclesRepository _bestVehiclesRepository;
+
+        public VehicleService(
+            IMapper mapper,
+            VehicleRepository transportModelRepository,
+            ImageService imageSaver,
+            BestVehiclesRepository bestVehiclesRepository)
         {
             _mapper = mapper;
             _vehicleRepository = transportModelRepository;
             _imageSaver = imageSaver;
+            _bestVehiclesRepository = bestVehiclesRepository;
         }
 
         public async Task<AddVehicleDto> GetVehicleById(int id)
@@ -32,25 +39,25 @@ namespace Garage.API.Services
         }
 
         public async Task<AddVehicleDto> Add(AddVehicleDto addVehicleDto, string userId)
-        {    
+        {
             var imageName = await _imageSaver.Save(addVehicleDto.Image);
-            
+
             var gotVehicle = _mapper.Map<VehicleEntity>(addVehicleDto, opt =>
             {
-                opt.Items["image"] =  "https://localhost:5009/images/" + imageName;
+                opt.Items["image"] = "https://localhost:5009/images/" + imageName;
                 opt.Items["userId"] = userId;
             });
 
             var addedVehicle = await _vehicleRepository.Add(gotVehicle);
-            
+
             return addVehicleDto;
         }
 
-        public async  Task<VehicleViewModel> GetUserVehicle(string userId, int page, int size)
+        public async Task<VehicleViewModel> GetUserVehicle(string userId, int page, int size)
         {
             var userVehicles = await _vehicleRepository.GetUserVehicles(int.Parse(userId));
 
-            var sendVehicleDtos = userVehicles.Select(v => 
+            var sendVehicleDtos = userVehicles.Select(v =>
                 _mapper.Map<SendVehicleDto>(v)).ToList();
 
             PageViewModel pageViewModel = new PageViewModel(sendVehicleDtos.Count(), page, size);
@@ -79,7 +86,18 @@ namespace Garage.API.Services
 
             return viewModel;
         }
-    }
 
-   
+        public async Task<List<SendVehicleDto>> GetBestVehiclesOfTheDay()
+        {
+            var bestVehicles = await _bestVehiclesRepository.GetBestOfTheDay();
+
+            List<SendVehicleDto> sendVehicleDtos = new List<SendVehicleDto>();
+            foreach (var bestVehicle in bestVehicles)
+            {
+                sendVehicleDtos.Add(_mapper.Map<SendVehicleDto>(bestVehicle));
+            }
+
+            return sendVehicleDtos;
+        }
+    }
 }

@@ -39,6 +39,17 @@ namespace Garage.API.Mappers
                         opt.MapFrom((src, dst, _, context) =>
                             context.Options.Items["userId"]
                         ));
+                CreateMap<VehicleEntity, BestVehicleEntity>()
+                    .ForMember(dest =>
+                        dest.VehicleEntityId, opt =>
+                        opt.MapFrom(src => src.Id))
+                    .ForMember(dest =>
+                        dest.DayOfBest, opt =>
+                        opt.MapFrom(src => src.CreateDate.Date))
+                    .ForMember(dest => 
+                        dest.Id, opt => 
+                            opt.Ignore());
+
             }
         }
     }

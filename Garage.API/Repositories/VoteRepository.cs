@@ -14,7 +14,7 @@ namespace Garage.API.Repositories
         public bool isVoteExist(int userId, int vehicleId)
         {
             var vote = GetDbContext().Votes.FirstOrDefault(v =>
-                v.UserId == userId && v.VehicleId == vehicleId);
+                v.UserId == userId && v.VehicleEntityId == vehicleId);
             
             return  vote != null;
         }

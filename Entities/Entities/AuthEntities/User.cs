@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Infrastructure.Data;
 
 namespace Auth.Data
@@ -13,5 +14,7 @@ namespace Auth.Data
         public string Password { get; set; }
 
         public RefreshToken RefreshToken { get; set; }
+        
+        public ICollection<VoteEntity> Students { get; set; }
     }
 }

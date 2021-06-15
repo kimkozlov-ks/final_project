@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Auth.Data;
+using Garage.Types.Data.Model;
 
 namespace Garage.Data.Entity
 {
@@ -7,7 +10,7 @@ namespace Garage.Data.Entity
     {
         public int Id { get; set; }
         
-        [ForeignKey("Users")]
+        [ForeignKey("User")]
         public int OwnerUserId { get; set; }
         
         public string Nickname { get; set;  }
@@ -15,14 +18,14 @@ namespace Garage.Data.Entity
         [ForeignKey("TransportType")]
         public int TypeId { get; set; }
         
-        [ForeignKey("TransporSubtType")]
+        [ForeignKey("TransportSubType")]
         public int SubTypeId { get; set; }
         
         [ForeignKey("TransportBrand")]
-        public int BrandId { get; set; }
+        public int TransportBrandId { get; set; }
         
-        [ForeignKey("TransportModel")]
-        public int ModelId { get; set; }
+        [ForeignKey("TransportModeld")]
+        public int TransportModelId { get; set; }
         
         public string Description { get; set; }
         
@@ -32,5 +35,7 @@ namespace Garage.Data.Entity
         public bool IsActive { get; set; }
         
         public int Rating { get; set; }
+        
+        public ICollection<BestVehicleEntity> BestVehicleEntities { get; set; }
     }
 }

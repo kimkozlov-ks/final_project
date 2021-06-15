@@ -3,6 +3,7 @@ import {Card, CardBody, CardImg, CardText, CardTitle, Button, Toast} from "react
 import {post} from "../../services/HttpClient";
 import {Vote, Vehicle} from "../../helpers/interface";
 import moment from "moment";
+import {Redirect} from "react-router";
 
 type VehicleProps = {
     vehicle: Vehicle
@@ -44,6 +45,10 @@ const VehicleCard: React.FC<VehicleProps> = ({
         }
     }
 
+    function handleReadMore() {
+        
+    }
+
     return (
         <Card style={{'width': '30%', 'height': '500px' }}>
             <CardImg top height="40%" src={vehicle.image} alt="vehibcle image"  />
@@ -58,9 +63,10 @@ const VehicleCard: React.FC<VehicleProps> = ({
                 <CardText>Create Date: { 
                     moment(vehicle.createDate).format('MMMM Do YYYY, h:mm')}</CardText>
             </CardBody>
+            <Button block onClick={handleReadMore}>Read more</Button>
             {
                 isVoteEnabled 
-                    ?  <Button disabled={isVoteDisabled} onClick={handleVote}>Vote</Button> 
+                    ?  <Button block disabled={isVoteDisabled} onClick={handleVote}>Vote</Button> 
                     : null 
             }
         </Card>

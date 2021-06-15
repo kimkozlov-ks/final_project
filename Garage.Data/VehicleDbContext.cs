@@ -7,6 +7,8 @@ namespace Garage.Data
     {
         public DbSet<VehicleEntity> Vehicles { get; set; }
         public DbSet<VoteEntity> Votes { get; set; }
+        
+        public DbSet<BestVehicleEntity> BestVehicles { get; set; }
 
         public VehicleDbContext(DbContextOptions options) : base(options) { }
         
