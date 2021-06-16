@@ -20,6 +20,11 @@ namespace Garage.API.Repositories
         {
             return await GetDbContext().Vehicles.Where(v => v.UserId == userId).ToListAsync();
         }
+        
+        public async Task<List<VehicleEntity>> GetByListIds(List<int> ids)
+        {
+            return await GetDbContext().Vehicles.Where(v => ids.Contains(v.Id)).ToListAsync();
+        }
 
         public int Count()
         {

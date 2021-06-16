@@ -21,7 +21,7 @@ namespace Garage.API.Services
         
         public async Task<bool> AddVote(string userId, VoteDto vote)
         {
-            bool isVoteExist =  _voteRepository.isVoteExist(int.Parse(userId), vote.VehicleId);
+            bool isVoteExist =  _voteRepository.IsVoteExist(int.Parse(userId), vote.VehicleId);
 
             if (isVoteExist)
             {

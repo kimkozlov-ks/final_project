@@ -28,12 +28,14 @@ namespace Garage.API.Workers
         {
             do
             {
-                if (DateTime.Now.Hour == 0)
+                if (DateTime.Now.Millisecond == 1)
                 {
                     using ( var scope = _service.CreateScope() )
                     {
+                        var voteRepository = scope.ServiceProvider.GetRequiredService<VoteRepository>();
+                        var bestVehiclesId = await voteRepository.GetBestVehiclesIdFromYesterday();
                         var vehicleRepository = scope.ServiceProvider.GetRequiredService<VehicleRepository>();
-                        var bestVehicles = await vehicleRepository.GetBestVehiclesFromYesterday();
+                        var bestVehicles = await vehicleRepository.GetByListIds(bestVehiclesId);
                         var bestVehicleRepository = scope.ServiceProvider.GetRequiredService<BestVehiclesRepository>();
                         var bestVehiclesMapped =
                             bestVehicles.Select(bV => 
@@ -45,7 +47,7 @@ namespace Garage.API.Workers
                     await Task.Delay(TimeSpan.FromHours(23), stoppingToken);
                 }
                 
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                //  await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested);
         }
