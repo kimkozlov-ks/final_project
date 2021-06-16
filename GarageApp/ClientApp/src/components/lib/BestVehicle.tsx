@@ -21,7 +21,6 @@ const BestVehicle: React.FC<{}> = () => {
     async function fetchBestVehicles() {
         const url = process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/best'
         const result = await get(url);
-        debugger
         if(result.success){
             setItems(result.body)
         }

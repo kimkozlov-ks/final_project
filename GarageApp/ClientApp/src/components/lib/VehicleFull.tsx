@@ -5,8 +5,13 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
 import {Label} from "reactstrap";
 import {useLocation, useParams} from "react-router";
+import {Brand} from "../../store/adminAreaStore/BrandsStore";
+import {Type} from "../../store/adminAreaStore/TypesStore";
 
-
+type Props = {
+    brands: Brand[],
+    types: Type[]
+}
 
 const VehicleFull: React.FC<{}> = ({
 }) => {
@@ -36,6 +41,10 @@ const VehicleFull: React.FC<{}> = ({
                     Nickname: {vehicle!.nickname}
                 </h3>
             </Label>
+            <Label>
+                
+            </Label>
+            
         </>
         )
     }
@@ -49,4 +58,13 @@ const VehicleFull: React.FC<{}> = ({
     )
 }
 
-export default VehicleFull
+const withConnect = connect(
+    (state: ApplicationState) => {
+        return {
+            brands: state.brands,
+            types: state.types
+        }
+    },
+)(VehicleFull as any)
+
+export default withConnect;

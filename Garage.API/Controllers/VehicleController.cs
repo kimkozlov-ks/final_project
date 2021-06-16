@@ -21,7 +21,6 @@ namespace Garage.API.Controllers
             _vehicleService = vehicleService;
         }
         
-        [Authorize]
         [HttpGet("")]
         public async Task<ActionResult<VehicleViewModel>> GetById([FromQuery] int page, int size)
         {
@@ -30,7 +29,6 @@ namespace Garage.API.Controllers
             return Ok(pageView);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<SendVehicleDto>> GetById([FromRoute] int id)
         {

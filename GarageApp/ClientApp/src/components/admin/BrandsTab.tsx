@@ -82,7 +82,7 @@ function BrandsTab(brandsProps: BrandsProps) {
     );
 }
 
-let withConnect = connect(
+const withConnect = connect(
     (state: ApplicationState) => {
         return state.brands
     },
