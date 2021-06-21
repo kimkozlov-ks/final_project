@@ -28,7 +28,7 @@ namespace Garage.API.Workers
         {
             do
             {
-                if (DateTime.Now.Millisecond == 1)
+                if (DateTime.Now.Hour == 0)
                 {
                     using ( var scope = _service.CreateScope() )
                     {
@@ -47,7 +47,7 @@ namespace Garage.API.Workers
                     await Task.Delay(TimeSpan.FromHours(23), stoppingToken);
                 }
                 
-                //  await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested);
         }
