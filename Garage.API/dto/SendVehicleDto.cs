@@ -9,15 +9,17 @@ namespace Garage.API.dto
         [Required]
         public int Id { get; set; }
         [Required]
+        public int UserId { get; set; }
+        [Required]
         public string Nickname { get; set;  }
         [Required]
-        public int TypeId { get; set; }
+        public int TransportTypeId { get; set; }
         [Required]
-        public int SubTypeId { get; set; }
+        public int TransportSubTypeId { get; set; }
         [Required]
-        public int BrandId { get; set; }
+        public int TransportBrandId { get; set; }
         [Required]
-        public int ModelId { get; set; }
+        public int TransportModelId { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]

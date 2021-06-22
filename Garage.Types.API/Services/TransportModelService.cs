@@ -53,5 +53,12 @@ namespace Garage.Types.API.Services
             
             await _transportModelRepository.Update(transportModel);
         }
+
+        public async Task<ActionResult<TransportModelDto>> GetTransportModel(int id)
+        {
+            var transportModel = await _transportModelRepository.Get(id);
+
+            return _mapper.Map<TransportModelDto>(transportModel);
+        }
     }
 }

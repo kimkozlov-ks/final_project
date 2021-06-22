@@ -46,5 +46,13 @@ namespace Garage.Types.API.Services
             
             return addedBrandDto;
         }
+
+
+        public async Task<ActionResult<TransportBrandDto>> GetTransportBrand(int id)
+        {
+            var transportBrand = await _transportBrandRepository.Get(id);
+            
+            return _mapper.Map<TransportBrandDto>(transportBrand);
+        }
     }
 }

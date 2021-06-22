@@ -1,7 +1,7 @@
 import React from 'react'
 import VehicleList from "./VehiclesList";
 import {get} from "../../services/HttpClient";
-import BestVehicle from "../lib/BestVehicle";
+import BestVehicle from "../vehicle/BestVehicle";
 
 const HomeWrapper: React.FC<{}> = () => {
     return (

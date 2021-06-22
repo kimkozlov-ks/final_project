@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.Types.API.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class TransportModelController : Controller
     {
@@ -31,7 +30,7 @@ namespace Garage.Types.API.Controllers
             return Ok(addedModel);
         }
         
-        [HttpGet("{id}")]
+        [HttpGet("brand/{id}")]
         public async Task<ActionResult<IEnumerable<TransportModelDto>>> GetTransportSubTypesByTypeId([FromRoute] int id)
         {
             return await _transportModelService.GetTransportModelsByBrand(id);
@@ -46,6 +45,12 @@ namespace Garage.Types.API.Controllers
             await _transportModelService.EditModel(transportModelDto);
             
             return Ok();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransportModelDto>> GetTransportModelById([FromRoute] int id)
+        {
+            return await _transportModelService.GetTransportModel(id);
         }
     }
 }

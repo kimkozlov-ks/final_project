@@ -81,5 +81,19 @@ namespace Garage.Types.API.Services
             
             await _transportSubTypeRepository.Update(transportSubType);
         }
+
+        public async Task<ActionResult<TransportSubTypeDto>> GetTransportSubTypeById(int id)
+        {
+            var transportSubType = await _transportSubTypeRepository.Get(id);
+            
+            return _mapper.Map<TransportSubTypeDto>(transportSubType);
+        }
+
+        public async Task<ActionResult<TransportTypeDto>> GetTransportTypeById(int id)
+        {
+            var transportType = await _transportTypeRepository.Get(id);
+            
+            return _mapper.Map<TransportTypeDto>(transportType);
+        }
     }
 }

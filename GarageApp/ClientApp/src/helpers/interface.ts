@@ -15,6 +15,7 @@ export interface Vote {
 
 export interface Vehicle {
     id: string
+    userId: string
     nickname: string
     typeId: number
     subTypeId: number

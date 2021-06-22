@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.Types.API.Controllers
 {    
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class TransportTypeController : Controller
     {
@@ -25,6 +24,12 @@ namespace Garage.Types.API.Controllers
             var transportTypeDtos = await _transportTypeService.GetTransportTypes();
             return Ok(transportTypeDtos);
         }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransportTypeDto>> GetTransportTypeById([FromRoute] int id)
+        {
+            return await _transportTypeService.GetTransportTypeById(id);
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost("add")] 
@@ -35,10 +40,16 @@ namespace Garage.Types.API.Controllers
             return Ok(await _transportTypeService.AddTransportType(transportTypeAddDto));
         }
         
-        [HttpGet("{id}")]
+        [HttpGet("{id}/subtypes")]
         public async Task<ActionResult<IEnumerable<TransportSubTypeDto>>> GetTransportSubTypesByTypeId([FromRoute] int id)
         {
             return await _transportTypeService.GetTransportSubTypesByTypeId(id);
+        }
+        
+        [HttpGet("subtype/{id}")]
+        public async Task<ActionResult<TransportSubTypeDto>> GetTransportSubTypeById([FromRoute] int id)
+        {
+            return await _transportTypeService.GetTransportSubTypeById(id);
         }
         
         [Authorize(Roles = "Admin")]

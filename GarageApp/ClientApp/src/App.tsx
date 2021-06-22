@@ -7,7 +7,7 @@ import './custom.css'
 import LoginForm from "./auth/LoginForm";
 import Logout from "./auth/Logout";
 import Register from "./auth/RegisterForm";
-import VehicleFull from "./components/lib/VehicleFull";
+import VehicleFull from "./components/vehicle/VehicleFull";
 import AdminArea from "./components/admin/AdminArea";
 import GarageWrapper from "./components/garage/GarageWrapper";
 import HomeWrapper from "./components/home/HomeWrapper";
@@ -16,6 +16,7 @@ import * as AuthStore from "./auth/AuthStore";
 import * as TypesStore from "../src/store/adminAreaStore/TypesStore"
 import * as BrandsStore from "../src/store/adminAreaStore/BrandsStore"
 import {connect} from "react-redux";
+import VehicleEdit from "./components/vehicle/VehicleEdit";
 
 type ReduxProps = {
     getTypes: () => void
@@ -34,7 +35,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         props.getTypes();
         props.getBrands();
     })
-    
+
     return (
         <CookiesProvider>
             <Layout>
@@ -45,6 +46,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 <Route exact path='/logout' component={Logout} />
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/vehicle/:id' component={VehicleFull} />
+                <Route exact path='/vehicle/edit/:id' component={VehicleEdit} />
             </Layout>
         </CookiesProvider>
     )

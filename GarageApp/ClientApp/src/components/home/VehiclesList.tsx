@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {VehiclePage} from "../../helpers/interface";
-import VehicleCard from "../lib/VehicleCard";
+import VehicleCard from "../vehicle/VehicleCard";
 import {get} from "../../services/HttpClient";
 import {Container, Pagination, PaginationItem, PaginationLink, Row} from "reactstrap";
 

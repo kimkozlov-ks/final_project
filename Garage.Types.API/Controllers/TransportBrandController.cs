@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Garage.Types.API.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class TransportBrandController : Controller
     {
@@ -23,6 +22,12 @@ namespace Garage.Types.API.Controllers
         public async Task<ActionResult<IEnumerable<TransportBrandDto>>> GetTransportBrandes()
         {
             return await _transportBrandService.GetTransportBrandes();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransportBrandDto>> GetTransportBrandById([FromRoute] int id)
+        {
+            return await _transportBrandService.GetTransportBrand(id);
         }
 
         [Authorize(Roles = "Admin")]
