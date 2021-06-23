@@ -99,5 +99,32 @@ namespace Garage.API.Services
 
             return sendVehicleDtos;
         }
+
+        public async Task<bool> Edit(EditVehicleDto editVehicleDto, string userId)
+        {
+            var vehicle = await _vehicleRepository.Get(editVehicleDto.Id);
+
+            if (!vehicle.UserId.ToString().Equals(userId))
+            {
+                return false;
+            }
+
+            vehicle.Nickname = editVehicleDto.Nickname;
+            vehicle.Description = editVehicleDto.Description;
+            vehicle.TransportBrandId = editVehicleDto.TransportBrandId;
+            vehicle.TransportModelId = editVehicleDto.TransportModelId;
+            vehicle.TransportTypeId = editVehicleDto.TransportTypeId;
+            vehicle.TransportSubTypeId = editVehicleDto.TransportSubTypeId;
+            if (editVehicleDto.Image != null)
+            {    
+                // TODO: remove old image!
+                var imageName = await _imageSaver.Save(editVehicleDto.Image);
+                vehicle.Image = "https://localhost:5009/images/" + imageName;
+            }
+
+            var res = await _vehicleRepository.Update(vehicle);
+
+            return res != null;
+        }
     }
 }

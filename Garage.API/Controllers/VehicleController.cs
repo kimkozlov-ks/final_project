@@ -71,6 +71,25 @@ namespace Garage.API.Controllers
             
             return Ok();
         }
+        
+        [Authorize]
+        [HttpPost("edit")] 
+        public async Task<ActionResult> EditVehicle([FromForm] EditVehicleDto editVehicleDto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+                
+            var userId = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value;
+            
+            var isEdited = await _vehicleService.Edit(editVehicleDto, userId);
 
+            if (!isEdited)
+            {
+                return Conflict();
+            }
+            
+            return Ok();
+        }
     }
 }
