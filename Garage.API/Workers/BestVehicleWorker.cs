@@ -10,10 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
 
 namespace Garage.API.Workers
 {
-    public class BestVehicleWorker: BackgroundService
+    public class BestVehicleWorker: IJob
     {
         private readonly IServiceProvider _service;
         private readonly IMapper _mapper;
@@ -24,33 +25,20 @@ namespace Garage.API.Workers
             _mapper = mapper;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task Execute(IJobExecutionContext context)
         {
-            do
-            {
-                if (DateTime.Now.Hour == 0)
-                {
-                    using ( var scope = _service.CreateScope() )
-                    {
-                        var voteRepository = scope.ServiceProvider.GetRequiredService<VoteRepository>();
-                        var bestVehiclesId = await voteRepository.GetBestVehiclesIdFromYesterday();
-                        var vehicleRepository = scope.ServiceProvider.GetRequiredService<VehicleRepository>();
-                        var bestVehicles = await vehicleRepository.GetByListIds(bestVehiclesId);
-                        var bestVehicleRepository = scope.ServiceProvider.GetRequiredService<BestVehiclesRepository>();
-                        var bestVehiclesMapped =
-                            bestVehicles.Select(bV => 
-                                _mapper.Map<BestVehicleEntity>(bV)).ToList();
-                        foreach (var bV in bestVehiclesMapped)
-                            await bestVehicleRepository.Add(bV);
-                    }
-                    
-                    await Task.Delay(TimeSpan.FromHours(23), stoppingToken);
-                }
-                
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            }
-            while (!stoppingToken.IsCancellationRequested);
+            using var scope = _service.CreateScope();
+            
+            var voteRepository = scope.ServiceProvider.GetRequiredService<VoteRepository>();
+            var bestVehiclesId = await voteRepository.GetBestVehiclesIdFromYesterday();
+            var vehicleRepository = scope.ServiceProvider.GetRequiredService<VehicleRepository>();
+            var bestVehicles = await vehicleRepository.GetByListIds(bestVehiclesId);
+            var bestVehicleRepository = scope.ServiceProvider.GetRequiredService<BestVehiclesRepository>();
+            var bestVehiclesMapped =
+                bestVehicles.Select(bV => 
+                    _mapper.Map<BestVehicleEntity>(bV)).ToList();
+            foreach (var bV in bestVehiclesMapped)
+                await bestVehicleRepository.Add(bV);
         }
-
     }
 }

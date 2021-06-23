@@ -24,6 +24,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 
 namespace Garage.API
 {
@@ -40,6 +41,28 @@ namespace Garage.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            services.AddQuartz(q =>
+            {    
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                var jobKey = new JobKey("BestVehiclesJob");
+                q.AddJob<BestVehicleWorker>(opts => opts.WithIdentity(jobKey));
+
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("BestVehiclesJob-trigger") 
+                    .WithCronSchedule("0 0/1 * * * ?")); // fired every 5 minutes
+
+                // q.AddTrigger(opts => opts
+                //     .ForJob(jobKey)
+                //     .WithIdentity("BestVehiclesJob-trigger")
+                //     .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0))); // fired every day at 00 00
+            });
+
+            services.AddQuartzServer(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
 
             services.AddCors(options =>
             {
@@ -60,8 +83,6 @@ namespace Garage.API
             services.AddTransient<BestVehiclesRepository>();
             services.AddSingleton<ImageService>();
             
-            services.AddHostedService<BestVehicleWorker>();
-
             var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile.MappingProfile()); });
 
             services.AddSingleton(mapperConfig.CreateMapper());
