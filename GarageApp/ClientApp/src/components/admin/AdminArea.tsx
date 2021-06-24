@@ -2,6 +2,9 @@ import * as React from 'react'
 import TypesTab from './TypesTab'
 import BrandsTab from './BrandsTab'
 import {useState} from "react";
+import {compose} from "redux";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {AuthRedirectType} from "../../helpers/interface";
 
 type AdminAreaProps = {};
 
@@ -39,8 +42,6 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
    
 }
 
-export default AdminArea;
-
-// export default compose(
-//     withAuthRedirect
-// )(withConnect);
+export default compose(
+    withAuthRedirect
+)(AdminArea, '/403', AuthRedirectType.ADMIN_ROLE);

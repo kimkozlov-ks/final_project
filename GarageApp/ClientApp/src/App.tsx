@@ -16,6 +16,7 @@ import * as TypesStore from "../src/store/adminAreaStore/TypesStore"
 import * as BrandsStore from "../src/store/adminAreaStore/BrandsStore"
 import {connect} from "react-redux";
 import VehicleEdit from "./components/vehicle/VehicleEdit";
+import Forbidden403 from "./components/errors/Forbidden403";
 
 type ReduxProps = {
     getTypes: () => void
@@ -46,6 +47,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/vehicle/:id' component={VehicleFull} />
                 <Route exact path='/vehicle/edit/:id' component={VehicleEdit} />
+                <Route exact path='/403' component={Forbidden403} />
             </Layout>
         </CookiesProvider>
     )

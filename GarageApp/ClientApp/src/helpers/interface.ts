@@ -26,3 +26,13 @@ export interface Vehicle {
     createDate: string
     rating: number
 }
+
+export enum AuthRedirectType{
+    ADMIN_ROLE,
+    LOGGED_IN
+}
+
+export enum UserRole {
+    ADMIN = 'Admin',
+    USER = 'User'
+}

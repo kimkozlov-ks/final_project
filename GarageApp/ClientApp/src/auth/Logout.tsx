@@ -27,4 +27,4 @@ let withConnect = connect(
 
 export default compose(
     withAuthRedirect
-)(withConnect);
+)(withConnect, '/login-form');

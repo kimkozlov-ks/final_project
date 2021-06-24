@@ -5,6 +5,7 @@ import './NavMenu.css';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
 import * as AuthStore from "../../auth/AuthStore";
+import {UserRole} from "../../helpers/interface";
 
 type Props =
     AuthStore.AuthState &
@@ -27,9 +28,16 @@ class NavMenu extends React.PureComponent<Props, { isOpen: boolean }> {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/adminArea">AdminArea</NavLink>
-                                </NavItem> 
+                                {
+                                    this.props.userInfo.role == UserRole.ADMIN
+                                    ? <>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark"
+                                                     to="/adminArea">AdminArea</NavLink>
+                                        </NavItem>
+                                    </>
+                                    : null
+                                }
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/garage/">Garage</NavLink>
                                 </NavItem>

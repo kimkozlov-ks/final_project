@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import MyGarage from "./MyGarage";
 import AddMyVehicleForm from "./AddMyVehicleForm";
 import {Button} from "reactstrap";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 type GarageWrapperProps = {};
 
@@ -38,4 +40,6 @@ function GarageWrapper(props: GarageWrapperProps) {
     </>
 }
 
-export default GarageWrapper;
+export default compose(
+    withAuthRedirect
+)(GarageWrapper, '/login-form');
