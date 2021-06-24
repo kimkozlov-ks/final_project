@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Route } from 'react-router';
 import Layout from './components/Layout';
-import Home from './components/Home';
 import { CookiesProvider } from "react-cookie";
 import './custom.css'
 import LoginForm from "./auth/LoginForm";
