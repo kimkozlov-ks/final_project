@@ -31,7 +31,7 @@ const VehicleList: React.FC<Props> = ({
     
     async function fetchVehicles(url: string) {
         const result = await get(url);
-        debugger
+
         if(result.success){
             setPage(result.body)
         }
@@ -40,7 +40,7 @@ const VehicleList: React.FC<Props> = ({
     useEffect(() => {
         const url = baseUrl + '?' + 'page=' + pageNumber + '&size=3'
         fetchVehicles(url).then(r => r).catch()
-    }, [pageNumber])
+    }, [pageNumber, baseUrl])
 
     function render() {
         // @ts-ignore
