@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Entities.Class.Entities.GarageEntities;
+using Garage.API.Models;
 using Garage.Data;
 using Garage.Types.Data;
 using Infrastructure.Data.Repository;
@@ -42,6 +44,18 @@ namespace Garage.API.Repositories
             return await GetDbContext().Vehicles.Where(v =>
                 v.CreateDate.Day == (DateTime.Now.Day - 1) && v.Rating == GetDbContext().Vehicles.Where(ve =>
                     ve.CreateDate.Day == (DateTime.Now.Day - 1)).Max(ve2 => ve2.Rating)).ToListAsync();
+        }
+
+        public async Task<int> GetFilteredCount(Expression<Func<VehicleEntity, bool>> filter)
+        {
+            return await GetDbContext().Vehicles
+                .Where(filter).CountAsync();
+        }
+        
+        public async Task<List<VehicleEntity>> GetFiltered(Expression<Func<VehicleEntity, bool>> filter)
+        {
+            return await GetDbContext().Vehicles
+                .Where(filter).ToListAsync();
         }
     }
 }

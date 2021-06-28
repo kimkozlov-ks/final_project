@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.Internal;
 using Entities.Class.Entities.GarageEntities;
 using Garage.API.dto;
 using Garage.API.Models;
@@ -125,6 +128,52 @@ namespace Garage.API.Services
             var res = await _vehicleRepository.Update(vehicle);
 
             return res != null;
+        }
+
+        public async Task<object> GetFilteredVehicles(VehicleFilterQueryParams vehicleFilterQueryParams, int page, int size)
+        {
+            var filter = GetFilterPredicate(vehicleFilterQueryParams);
+            var count = await _vehicleRepository.GetFilteredCount(filter);
+            var vehicleEntities = await _vehicleRepository.GetFiltered(filter);
+
+            var vehicleDtos = vehicleEntities.Select(v => _mapper.Map<SendVehicleDto>(v)).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, size);
+            VehicleViewModel viewModel = new VehicleViewModel
+            {
+                PageViewModel = pageViewModel,
+                Vehicles = vehicleDtos
+            };
+
+            return viewModel;
+        }
+        
+        private Expression<Func<VehicleEntity, bool>> GetFilterPredicate(VehicleFilterQueryParams f)
+        {
+            Expression res = Expression.Constant(true);
+            
+            var paramExpr = Expression.Parameter(typeof(VehicleEntity));
+
+            var expressions = new List<KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>>()
+            {
+                new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.TypeId != null,
+                    v => v.TransportTypeId == f.TypeId),
+                new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.SubTypeId != null,
+                    v => v.TransportSubTypeId == f.SubTypeId),
+                new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.BrandId != null,
+                    v => v.TransportBrandId == f.BrandId),
+                new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.ModelId != null,
+                    v => v.TransportModelId == f.ModelId)
+            };
+        
+            expressions.ForAll(exp =>
+            {
+                if(exp.Key){
+                    res = Expression.And(res, Expression.Invoke(exp.Value, paramExpr));
+                }
+            });
+
+            return Expression.Lambda<Func<VehicleEntity, bool>>(res, paramExpr);
         }
     }
 }

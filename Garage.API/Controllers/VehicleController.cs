@@ -28,6 +28,17 @@ namespace Garage.API.Controllers
 
             return Ok(pageView);
         }
+        
+        [HttpGet("filter")]
+        public async Task<ActionResult<VehicleViewModel>> GetById(
+            [FromQuery] VehicleFilterQueryParams vehicleFilterQueryParams,
+            int page,
+            int size)
+        {
+            var pageView =  await _vehicleService.GetFilteredVehicles(vehicleFilterQueryParams, page, size);
+
+            return Ok(pageView);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SendVehicleDto>> GetById([FromRoute] int id)
