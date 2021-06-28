@@ -57,7 +57,6 @@ function BrandsTab(brandsProps: BrandsProps) {
 
     return (
         <div>
-            BRANDS
             <ul>
                 {
                     brandsProps.brands.map((el, index) =>
