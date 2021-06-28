@@ -62,6 +62,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             data.append("transportmodelid", selectedModel.id.toString());
             data.append("description", description);
             if(imageFromFile) data.append("image", imageFromFile);
+            debugger
             const res  = await post( process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/edit', data )
 
             if(res.success){
@@ -119,7 +120,9 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             console.warn(`Fail... fetch info about vehicle id = #${id}`)
         }
     }
-    
+
+    console.log(vehicle);
+
     useEffect(() => {
         fetchVehicle().catch()
     }, [])
@@ -148,6 +151,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
     }
 
     function handleSubTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        debugger
         const selectedSubType = selectedVehicleType!.subTypes.find(subtype => subtype.id.toString() === event.target.value)
 
         if(selectedSubType !== undefined) {
@@ -156,6 +160,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
     }
 
     function handleModelSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        debugger
         const selectedModel = selectedBrand!.models.find(model => model.id.toString() === event.target.value)
 
         if(selectedModel !== undefined) {
@@ -182,6 +187,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             <FormGroup>
                 <Label for="exampleSelect">Type</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleTypeSelect}>
+                    <option value="" hidden></option>
                     {types.vehicleType.map(type => (
                         <option 
                             id={type.id.toString()} 
@@ -194,6 +200,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
                 </Input>
                 <Label for="exampleSelect">SubType</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleSubTypeSelect}>
+                    <option value="" hidden></option>
                     {
                         types.vehicleType.map(type => {
                             if(selectedVehicleType && type.id === selectedVehicleType.id){
@@ -213,6 +220,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             <FormGroup>
                 <Label for="exampleSelect">Brand</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleBrandSelect}>
+                    <option value="" hidden></option>
                     {brands.brands.map(brand => (
                         <option 
                             id={brand.id.toString()} 
@@ -224,6 +232,7 @@ const VehicleEdit: React.FC<ReduxProps> = ({
                 </Input>
                 <Label for="exampleSelect">SubBrand</Label>
                 <Input type="select" name="select" id="exampleSelect" onChange={handleModelSelect}>
+                    <option value="" hidden></option>
                     {
                         brands.brands.map(brand => {
                             if(selectedBrand && brand.id === selectedBrand.id){
