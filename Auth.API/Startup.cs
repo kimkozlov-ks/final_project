@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Auth.API.Services;
 using Auth.Data;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,6 +46,8 @@ namespace Auth.API
             });
 
             JwtSetup.Setup(services);
+
+            services.AddTransient<AuthService>();
             
             var connectionString = Configuration["DbConnectionString"];
             services.AddDbContext<AuthDbContext>(
