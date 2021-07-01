@@ -61,7 +61,10 @@ namespace Garage.Tests
             Assert.NotNull(postActionResult);
             Assert.True(postActionResult.StatusCode == HttpStatusCode.OK);
 
-            var id = JsonConvert.DeserializeObject<int>(await postActionResult.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var id = JsonConvert.DeserializeObject<int>(
+                await postActionResult.Content
+                    .ReadAsStringAsync()
+                    . ConfigureAwait(false));
 
             var getActionResult = await _garageApiClient.GetAsync($"api/vehicle/{id}");
             

@@ -10,6 +10,7 @@ using Auth.API.Model;
 using Auth.API.Services;
 using Auth.Data;
 using Entities.Class.Entities.AuthEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +93,7 @@ namespace Auth.API.Controllers
             user.Role.RolePermissions = await _context.RolePermissions
                 .Select(p => p)
                 .Where(rp => rp.RoleId == user.RoleId).ToListAsync();
-            var accessToken = _authService.GenerateAccessToken(user);
+            
             var newRefreshToken = Guid.NewGuid();
 
             if(user.RefreshToken == null)
@@ -117,6 +118,8 @@ namespace Auth.API.Controllers
             }
 
             AddRefreshTokenCookie(newRefreshToken);
+            
+            var accessToken = _authService.GenerateAccessToken(user);
             return Ok(new ResponseAccessToken(accessToken));
         }
 
@@ -171,7 +174,22 @@ namespace Auth.API.Controllers
             AddRefreshTokenCookie(newRefreshToken);
             return Ok(new ResponseAccessToken(accessToken));
         }
-        
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<User>> DeleteUser([FromRoute] int id)
+        {
+            var userId = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value;
+
+            if (userId == null || int.Parse(userId) != id)
+            {
+                return Conflict();
+            }
+
+            return Ok(await _authService.DeleteUser(id));
+        }
        
         private void AddRefreshTokenCookie(Guid refreshToken)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Auth.API.Repositories;
 using Auth.API.Services;
 using Auth.Data;
 using Infrastructure.Data;
@@ -48,6 +49,7 @@ namespace Auth.API
             JwtSetup.Setup(services);
 
             services.AddTransient<AuthService>();
+            services.AddTransient<UserRepository>();
             
             var connectionString = Configuration["DbConnectionString"];
             services.AddDbContext<AuthDbContext>(
