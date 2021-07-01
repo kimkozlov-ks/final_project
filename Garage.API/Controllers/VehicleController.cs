@@ -70,7 +70,7 @@ namespace Garage.API.Controllers
         
         [Authorize]
         [HttpPost("add")] 
-        public async Task<ActionResult<AddVehicleDto>> AddVehicle([FromForm] AddVehicleDto addVehicleDto)
+        public async Task<ActionResult<int>> AddVehicle([FromForm] AddVehicleDto addVehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
                 
@@ -86,27 +86,41 @@ namespace Garage.API.Controllers
                 return Conflict();
             }
             
-            return Ok(res);
+            return Ok(res.Id);
         }
-        
+
         [Authorize]
-        [HttpPost("edit")] 
+        [HttpPost("edit")]
         public async Task<ActionResult> EditVehicle([FromForm] EditVehicleDto editVehicleDto)
         {
             if (!ModelState.IsValid) return BadRequest();
-                
+
             var userId = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
-            
+
             var isEdited = await _vehicleService.Edit(editVehicleDto, userId);
 
             if (!isEdited)
             {
                 return Conflict();
             }
-            
+
             return Ok();
+        }
+
+        [Authorize(Roles = "Test")]
+        [HttpDelete("{id}")] 
+        public async Task<ActionResult> DeleteVehicle([FromRoute] int id)
+        {
+           var res = await _vehicleService.DeleteVehicle(id);
+
+           if (res == null)
+           {
+               return Conflict();
+           }
+           
+           return Ok();
         }
     }
 }

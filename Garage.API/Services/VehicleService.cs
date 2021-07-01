@@ -41,7 +41,7 @@ namespace Garage.API.Services
 
         }
 
-        public async Task<AddVehicleDto> Add(AddVehicleDto addVehicleDto, string userId)
+        public async Task<SendVehicleDto> Add(AddVehicleDto addVehicleDto, string userId)
         {
             var imageName = await _imageSaver.Save(addVehicleDto.Image);
 
@@ -58,7 +58,7 @@ namespace Garage.API.Services
                 return null;
             }
             
-            return addVehicleDto;
+            return _mapper.Map<SendVehicleDto>(addedVehicle);
         }
 
         public async Task<VehicleViewModel> GetUserVehicle(string userId, int page, int size)
@@ -179,6 +179,11 @@ namespace Garage.API.Services
             });
 
             return Expression.Lambda<Func<VehicleEntity, bool>>(res, paramExpr);
+        }
+
+        public async Task<VehicleEntity> DeleteVehicle(int id)
+        {
+            return await _vehicleRepository.Delete(id);
         }
     }
 }

@@ -20,11 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Auth.API\Auth.API.csproj" />
       <ProjectReference Include="..\Garage.API\Garage.API.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="images" />
     </ItemGroup>
 
 </Project>
