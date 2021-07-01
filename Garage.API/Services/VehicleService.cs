@@ -20,17 +20,20 @@ namespace Garage.API.Services
         private readonly IMapper _mapper;
         private readonly ImageService _imageSaver;
         private readonly BestVehiclesRepository _bestVehiclesRepository;
+        private readonly VoteService _voteService;
 
         public VehicleService(
             IMapper mapper,
             VehicleRepository transportModelRepository,
             ImageService imageSaver,
-            BestVehiclesRepository bestVehiclesRepository)
+            BestVehiclesRepository bestVehiclesRepository, 
+            VoteService voteService)
         {
             _mapper = mapper;
             _vehicleRepository = transportModelRepository;
             _imageSaver = imageSaver;
             _bestVehiclesRepository = bestVehiclesRepository;
+            _voteService = voteService;
         }
 
         public async Task<SendVehicleDto> GetVehicleById(int id)
@@ -78,7 +81,7 @@ namespace Garage.API.Services
             return viewModel;
         }
 
-        public async Task<VehicleViewModel> GetVehicles(int page, int size)
+        public async Task<VehicleViewModel> GetVehicles(int page, int size, string userId)
         {
             var count = _vehicleRepository.Count();
             var vehicleEntities = await _vehicleRepository.GetPage(page, size);
@@ -89,7 +92,11 @@ namespace Garage.API.Services
             VehicleViewModel viewModel = new VehicleViewModel
             {
                 PageViewModel = pageViewModel,
-                Vehicles = vehicleDtos
+                Vehicles = vehicleDtos,
+                VotedVehicles = userId == null 
+                    ? null 
+                    : vehicleDtos.Select(v => v.Id).Where(id => 
+                        _voteService.IsVoted(id, int.Parse(userId)))
             };
 
             return viewModel;

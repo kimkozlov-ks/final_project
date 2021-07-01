@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Garage.API.dto;
 using Infrastructure.Data.Pageable;
@@ -8,5 +9,7 @@ namespace Garage.API.Models
     {
         public IEnumerable<SendVehicleDto> Vehicles { get; set; }
         public PageViewModel PageViewModel { get; set; }
+        
+        public IEnumerable<int> VotedVehicles { get; set; }
     }
 }

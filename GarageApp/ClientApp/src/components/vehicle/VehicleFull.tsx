@@ -34,7 +34,6 @@ const VehicleFull: React.FC<AuthRedirectProps> = ({
             const brand = process.env.REACT_APP_TYPES_API_BASE_URL + 'api/transportBrand/' + result.body.transportBrandId
             const modelUrl = process.env.REACT_APP_TYPES_API_BASE_URL + 'api/TransportModel/' + result.body.transportModelId
             
-            debugger
             const typeRes = await get(typeUrl);
             if(typeRes.success){
                 setVehicleType(typeRes.body.name)

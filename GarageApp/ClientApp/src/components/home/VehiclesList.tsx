@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {VehiclePage} from "../../helpers/interface";
 import VehicleCard from "../vehicle/VehicleCard";
-import {get} from "../../services/HttpClient";
+import {get, post} from "../../services/HttpClient";
 import {Container, Pagination, PaginationItem, PaginationLink, Row} from "reactstrap";
 
 type Props = {
@@ -17,7 +17,8 @@ const emptyPage: VehiclePage = {
         totalPages: 0,
         hasNextPage: false,
         hasPreviousPage: false
-    }
+    },
+    votedVehicles: []
 }
 
 const VehicleList: React.FC<Props> = ({
@@ -37,18 +38,22 @@ const VehicleList: React.FC<Props> = ({
         }
     }
     
+    
     useEffect(() => {
         const url = baseUrl + '?' + 'page=' + pageNumber + '&size=3'
-        fetchVehicles(url).then(r => r).catch()
+        fetchVehicles(url).then().catch()
     }, [pageNumber, baseUrl])
 
     function render() {
-        // @ts-ignore
-        return page.vehicles.map(vehicle => <VehicleCard 
+        return page.vehicles.map(vehicle => (
+            // @ts-ignore
+            <VehicleCard 
                 isVoteEnabled={isVoteEnabled} 
+                isVoted={page.votedVehicles ? !page.votedVehicles.includes(vehicle.id) : false }
                 incrementRating={() => setPageNumber(pageNumber)} 
                 vehicle={vehicle}
             /> )
+        )
     }
 
     function renderPaginationItems() {

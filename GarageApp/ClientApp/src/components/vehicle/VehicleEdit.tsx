@@ -53,7 +53,6 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             description &&
             image){
             const data = new FormData();
-            debugger
             data.append("id", vehicle!.id);
             data.append("nickname", nickname);
             data.append("transporttypeid", selectedVehicleType.id.toString());
@@ -62,7 +61,6 @@ const VehicleEdit: React.FC<ReduxProps> = ({
             data.append("transportmodelid", selectedModel.id.toString());
             data.append("description", description);
             if(imageFromFile) data.append("image", imageFromFile);
-            debugger
             const res  = await post( process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/edit', data )
 
             if(res.success){
@@ -151,7 +149,6 @@ const VehicleEdit: React.FC<ReduxProps> = ({
     }
 
     function handleSubTypeSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        debugger
         const selectedSubType = selectedVehicleType!.subTypes.find(subtype => subtype.id.toString() === event.target.value)
 
         if(selectedSubType !== undefined) {
@@ -160,7 +157,6 @@ const VehicleEdit: React.FC<ReduxProps> = ({
     }
 
     function handleModelSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        debugger
         const selectedModel = selectedBrand!.models.find(model => model.id.toString() === event.target.value)
 
         if(selectedModel !== undefined) {

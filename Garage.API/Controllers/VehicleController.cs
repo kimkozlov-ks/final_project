@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Entities.Class.Entities.GarageEntities;
 using Garage.API.dto;
 using Garage.API.Models;
 using Garage.API.Services;
@@ -23,8 +24,12 @@ namespace Garage.API.Controllers
         
         [HttpGet("")]
         public async Task<ActionResult<VehicleViewModel>> GetById([FromQuery] int page, int size)
-        {
-            var pageView =  await _vehicleService.GetVehicles(page, size);
+        {    
+            var userId = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value; 
+            
+            var pageView =  await _vehicleService.GetVehicles(page, size, userId);
 
             return Ok(pageView);
         }

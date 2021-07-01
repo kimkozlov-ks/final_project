@@ -6,6 +6,7 @@ export interface VehiclePage {
         "hasPreviousPage": boolean,
         "hasNextPage": boolean
     }
+    "votedVehicles" : string []
 }
 
 export interface Vote {

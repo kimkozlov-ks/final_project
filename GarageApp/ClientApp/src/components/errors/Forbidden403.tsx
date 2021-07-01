@@ -1,8 +1,6 @@
 import React from "react";
 
 const Forbidden403: React.FC<{}> = () => {
-    
-    debugger
     return (
         <div style={{}}>
             <h1>403.</h1>

@@ -12,7 +12,6 @@ type AuthRedirectProps =
 export const withAuthRedirect = (Component: any, redirectPage: string, conditionType: AuthRedirectType = AuthRedirectType.LOGGED_IN) => {
     class RedirectComponent extends React.Component<AuthRedirectProps>{
         render() {
-            debugger
             switch (conditionType){
                case AuthRedirectType.ADMIN_ROLE:
                    if(!(this.props.userInfo.role === UserRole.ADMIN)) return <Redirect to={redirectPage}/>

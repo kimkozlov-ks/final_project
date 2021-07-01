@@ -54,7 +54,6 @@ const AddMyVehicleForm: React.FC<Props> = ({
             data.append("description", description);
             data.append("image", image);
             const res  = await post( process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/add', data )
-            debugger
             if(res.success){
                 back()
                 return

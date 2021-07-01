@@ -12,6 +12,7 @@ type VehicleProps = {
     vehicle: Vehicle
     incrementRating?: () => void
     isVoteEnabled: boolean
+    isVoted: boolean
 };
 
 type ReduxProps = typeof actionCreators
@@ -23,10 +24,11 @@ const VehicleCard: React.FC<Props> = ({
     vehicle, 
     incrementRating,
     isVoteEnabled,
-    setActiveVehicleId
+    setActiveVehicleId, 
+    isVoted
  }) => {
     
-    const[isVoteDisabled, switchVote] = useState(false)
+    const[isVoteDisabled, switchVote] = useState()
     const[ratingIncrement, setRatingIncrement] = useState(0)
 
     async function handleVote(){
@@ -40,15 +42,13 @@ const VehicleCard: React.FC<Props> = ({
         }
         const res = await post(process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vote/',  JSON.stringify(vote), headers)
         
-        debugger
         if(res.statusCode == 409){
             alert('You have already voted for this vehicle!')
             return;
         }
         
-        if(!res.success){
-        }
-        else{
+        if(res.success){
+            switchVote(true)
             setRatingIncrement(ratingIncrement + 1)
         }
     }
@@ -70,8 +70,8 @@ const VehicleCard: React.FC<Props> = ({
                 Read more
             </Link>
             {
-                isVoteEnabled 
-                    ?  <Button block disabled={isVoteDisabled} onClick={handleVote}>Vote</Button> 
+                isVoteEnabled
+                    ?  <Button block disabled={!isVoted || isVoteDisabled} onClick={handleVote}>Vote</Button> 
                     : null 
             }
         </Card>

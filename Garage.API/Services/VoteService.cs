@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Entities.Class.Entities.GarageEntities;
@@ -43,6 +45,11 @@ namespace Garage.API.Services
             }
 
             return isAddedVote;
+        }
+
+        public bool IsVoted(int vehicleId, int userId)
+        {
+            return _voteRepository.IsVoted(userId, vehicleId);
         }
     }
 }

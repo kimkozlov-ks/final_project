@@ -45,5 +45,11 @@ namespace Garage.API.Repositories
                 .Select(v => v.vehicleId) 
                 .ToList();
         }
+
+        public bool IsVoted(int userId, int vehicleId)
+        {
+            return  GetDbContext().Votes.FirstOrDefault(v =>
+                v.UserId == userId && v.VehicleEntityId == vehicleId) != null;
+        }
     }
 }
