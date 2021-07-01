@@ -53,6 +53,11 @@ namespace Garage.API.Services
 
             var addedVehicle = await _vehicleRepository.Add(gotVehicle);
 
+            if (addedVehicle == null)
+            {
+                return null;
+            }
+            
             return addVehicleDto;
         }
 

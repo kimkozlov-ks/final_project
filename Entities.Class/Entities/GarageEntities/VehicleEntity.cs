@@ -7,8 +7,6 @@ namespace Entities.Class.Entities.GarageEntities
 {
     public class VehicleEntity : Infrastructure.Data.Entity
     {
-        public int Id { get; set; }
-        
         public int UserId { get; set; }
         public User User { get; set; }
         

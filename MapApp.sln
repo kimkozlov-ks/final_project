@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarageApp", "GarageApp\Gara
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities.Class", "Entities.Class\Entities.Class.csproj", "{69178B7B-8BF7-4A29-86FD-B830DA539F15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Garage.Tests", "Garage.Tests\Garage.Tests.csproj", "{E63A1F02-00AD-4C3F-AE11-9D04E3D3A036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{69178B7B-8BF7-4A29-86FD-B830DA539F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69178B7B-8BF7-4A29-86FD-B830DA539F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69178B7B-8BF7-4A29-86FD-B830DA539F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E63A1F02-00AD-4C3F-AE11-9D04E3D3A036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E63A1F02-00AD-4C3F-AE11-9D04E3D3A036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E63A1F02-00AD-4C3F-AE11-9D04E3D3A036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E63A1F02-00AD-4C3F-AE11-9D04E3D3A036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F80CD35B-FFD6-40BC-95B7-CA026A024DF7} = {A5F99400-BC1A-44BC-B3D7-854759A3EC5D}

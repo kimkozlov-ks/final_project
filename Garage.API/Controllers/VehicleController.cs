@@ -78,9 +78,15 @@ namespace Garage.API.Controllers
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
             
-            await _vehicleService.Add(addVehicleDto, userId);
             
-            return Ok();
+            var res = await _vehicleService.Add(addVehicleDto, userId);
+
+            if (res == null)
+            {
+                return Conflict();
+            }
+            
+            return Ok(res);
         }
         
         [Authorize]
