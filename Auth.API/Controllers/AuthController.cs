@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Auth.API.Model;
+using Auth.API.Services;
 using Auth.Data;
 using Entities.Class.Entities.AuthEntities;
 using Microsoft.AspNetCore.Http;
@@ -23,11 +24,13 @@ namespace Auth.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly AuthDbContext _context;
+        private readonly AuthService _authService;
 
-        public AuthController(IConfiguration configuration, AuthDbContext context)
+        public AuthController(IConfiguration configuration, AuthDbContext context, AuthService authService)
         {
             _configuration = configuration;
             _context = context;
+            _authService = authService;
         }
         
         [HttpPost("login")]
@@ -47,7 +50,7 @@ namespace Auth.API.Controllers
 
             if (user == null) return Unauthorized();
 
-            var accessToken = GenerateAccessToken(user);
+            var accessToken = _authService.GenerateAccessToken(user);
             var newRefreshToken = Guid.NewGuid();
 
             if(user.RefreshToken == null)
@@ -89,7 +92,7 @@ namespace Auth.API.Controllers
             user.Role.RolePermissions = await _context.RolePermissions
                 .Select(p => p)
                 .Where(rp => rp.RoleId == user.RoleId).ToListAsync();
-            var accessToken = GenerateAccessToken(user);
+            var accessToken = _authService.GenerateAccessToken(user);
             var newRefreshToken = Guid.NewGuid();
 
             if(user.RefreshToken == null)
@@ -159,7 +162,7 @@ namespace Auth.API.Controllers
 
             if (user == null) return Unauthorized();
 
-            var accessToken = GenerateAccessToken(user);
+            var accessToken = _authService.GenerateAccessToken(user);
             var newRefreshToken = Guid.NewGuid();
 
             user.RefreshToken.Refresh = newRefreshToken;
@@ -169,45 +172,7 @@ namespace Auth.API.Controllers
             return Ok(new ResponseAccessToken(accessToken));
         }
         
-        private string GenerateAccessToken(User user)
-        {
-
-            var issuer = _configuration["Issuer"] ?? throw new ArgumentException();
-            var audience = _configuration["Audience"] ?? throw new ArgumentException();
-
-            var subject = new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.Name)
-
-            });
-                // .Concat(user.Role.RolePermissions
-                //      .Select(p => 
-                //          new Claim("Permission", ((int)p.PermissionType).ToString()))));
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["JwtTokenSecret"])),
-                SecurityAlgorithms.HmacSha256Signature);
-                
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Issuer = issuer,
-                Audience = audience,
-
-                IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("TokenExpiryDuration")),
-
-                Subject = subject,
-                SigningCredentials = signingCredentials
-            };
-
-            var handler = new JwtSecurityTokenHandler();
-            
-            var jwtToken = handler.CreateJwtSecurityToken(tokenDescriptor);
-            return handler.WriteToken(jwtToken);
-        }
-
+       
         private void AddRefreshTokenCookie(Guid refreshToken)
         {
             Response.Cookies
