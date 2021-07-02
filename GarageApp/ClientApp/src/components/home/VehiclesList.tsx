@@ -40,7 +40,8 @@ const VehicleList: React.FC<Props> = ({
     
     
     useEffect(() => {
-        const url = baseUrl + '?' + 'page=' + pageNumber + '&size=3'
+        const url = baseUrl + 'page=' + pageNumber + '&size=3'
+        console.log(url);
         fetchVehicles(url).then().catch()
     }, [pageNumber, baseUrl])
 

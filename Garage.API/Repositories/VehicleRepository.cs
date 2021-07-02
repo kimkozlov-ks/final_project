@@ -35,27 +35,37 @@ namespace Garage.API.Repositories
 
         public async Task<List<VehicleEntity>> GetPage(int page, int size)
         {
-            return await GetDbContext().Vehicles.OrderBy(v => v.CreateDate). 
-                Skip((page - 1) * size).Take(size).ToListAsync();
+            return await GetDbContext().Vehicles
+                .OrderBy(v => v.CreateDate)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
         }
         
         public async Task<List<VehicleEntity>> GetBestVehiclesFromYesterday()
         {
-            return await GetDbContext().Vehicles.Where(v =>
-                v.CreateDate.Day == (DateTime.Now.Day - 1) && v.Rating == GetDbContext().Vehicles.Where(ve =>
-                    ve.CreateDate.Day == (DateTime.Now.Day - 1)).Max(ve2 => ve2.Rating)).ToListAsync();
+            return await GetDbContext().Vehicles
+                .Where(v =>
+                    v.CreateDate.Day == (DateTime.Now.Day - 1) && v.Rating == GetDbContext().Vehicles
+                        .Where(ve => 
+                            ve.CreateDate.Day == (DateTime.Now.Day - 1)).Max(ve2 => ve2.Rating))
+                .ToListAsync();
         }
 
         public async Task<int> GetFilteredCount(Expression<Func<VehicleEntity, bool>> filter)
         {
             return await GetDbContext().Vehicles
-                .Where(filter).CountAsync();
+                .Where(filter)
+                .CountAsync();
         }
         
-        public async Task<List<VehicleEntity>> GetFiltered(Expression<Func<VehicleEntity, bool>> filter)
+        public async Task<List<VehicleEntity>> GetFiltered(Expression<Func<VehicleEntity, bool>> filter, int page, int size)
         {
             return await GetDbContext().Vehicles
-                .Where(filter).ToListAsync();
+                .Where(filter) 
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();;
         }
     }
 }

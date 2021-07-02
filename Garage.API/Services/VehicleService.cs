@@ -146,7 +146,7 @@ namespace Garage.API.Services
         {
             var filter = GetFilterPredicate(vehicleFilterQueryParams);
             var count = await _vehicleRepository.GetFilteredCount(filter);
-            var vehicleEntities = await _vehicleRepository.GetFiltered(filter);
+            var vehicleEntities = await _vehicleRepository.GetFiltered(filter, page, size);
 
             var vehicleDtos = vehicleEntities.Select(v => _mapper.Map<SendVehicleDto>(v)).ToList();
 
@@ -167,7 +167,9 @@ namespace Garage.API.Services
             var paramExpr = Expression.Parameter(typeof(VehicleEntity));
 
             var expressions = new List<KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>>()
-            {
+            {    
+                new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(true,
+                    v => true),
                 new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.TypeId != null,
                     v => v.TransportTypeId == f.TypeId),
                 new KeyValuePair<bool, Expression<Func<VehicleEntity, bool>>>(f.SubTypeId != null,

@@ -52,7 +52,6 @@ const Filters: React.FC<ReduxProps & ParentProps> = ({
             url += 'modelid=' + selectedModel.id + '&';
         }
 
-        console.log(url);
         setFilter(url)
     }
     
