@@ -93,7 +93,7 @@ namespace Auth.API
 
             var context = serviceScope.ServiceProvider
                 .GetRequiredService<AuthDbContext>();
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
         }
     }
 }

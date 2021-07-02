@@ -102,6 +102,8 @@ namespace Garage.API
                 app.UseDeveloperExceptionPage();
             }
 
+            EnsureDbCreated(app);
+
             app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
@@ -124,6 +126,18 @@ namespace Garage.API
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+        
+        private static void EnsureDbCreated(IApplicationBuilder app)
+        {
+            using var serviceScope = app
+                .ApplicationServices
+                .GetService<IServiceScopeFactory>()
+                .CreateScope();
+
+            var context = serviceScope.ServiceProvider
+                .GetRequiredService<VehicleDbContext>();
+            context.Database.Migrate();
         }
     }
 }
