@@ -16,16 +16,17 @@ export async function get(url: string) : Promise<Response> {
         }
         const res = await fetch(url, header) ;
 
+        console.log(res);
         if(res.status != 200)
         {
-            return {success: false};
+            return {success: false, statusCode: res.status};
         }
 
         const data = await res.json();
         
         return {success: true, body: data};
     } catch (err) {
-        return {success: false, err: "Logout failed! Exception: " + err }
+        return {success: false, err: "Request failed! Exception: " + err }
     }
 }
 
@@ -70,5 +71,25 @@ export async function put(url: string, body: string, headers: any) {
 
     } catch (err) {
         return {success: false, err: "Exception: " + err };
+    }
+}
+
+export async function head(url: string) : Promise<Response> {
+    try {
+        const header = {
+            method: 'HEAD',
+            headers: authHeader()
+        }
+        const res = await fetch(url, header) ;
+
+        console.log(res);
+        if(res.status != 200)
+        {
+            return {success: false, statusCode: res.status};
+        }
+        
+        return {success: true};
+    } catch (err) {
+        return {success: false, err: "Request failed! Exception: " + err }
     }
 }

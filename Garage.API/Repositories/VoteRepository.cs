@@ -24,12 +24,10 @@ namespace Garage.API.Repositories
             return  vote != null;
         }
 
-        public async Task<List<int>> GetBestVehiclesIdFromYesterday()
-        {    
-            var yesterday = DateTime.Now.Date.AddDays(-1);
-
+        public async Task<List<int>> GetBestVehiclesIdFromDay(DateTime date)
+        {
             var vehiclesId = await GetDbContext().Votes
-                .Where(v => v.VoteTime.Date.Equals(yesterday))
+                .Where(v => v.VoteTime.Date.Equals(date))
                 .GroupBy(v2 => v2.VehicleEntityId)
                 .Select(group => new
                 {

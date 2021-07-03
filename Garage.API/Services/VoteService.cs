@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,6 +51,11 @@ namespace Garage.API.Services
         public bool IsVoted(int vehicleId, int userId)
         {
             return _voteRepository.IsVoted(userId, vehicleId);
+        }
+
+        public async Task<List<int>> GetBestVehiclesIdToday()
+        {
+            return await _voteRepository.GetBestVehiclesIdFromDay(DateTime.Now.Date);
         }
     }
 }

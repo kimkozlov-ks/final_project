@@ -5,7 +5,8 @@ import {useState} from "react";
 import {compose} from "redux";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {AuthRedirectType} from "../../helpers/interface";
-import {Nav, NavItem, NavLink, TabContent} from "reactstrap";
+import {Button, Nav, NavItem, NavLink, TabContent} from "reactstrap";
+import {head} from "../../services/HttpClient";
 
 type AdminAreaProps = {};
 
@@ -33,9 +34,28 @@ function AdminArea(adminAreaProps: AdminAreaProps) {
     {
         setActiveTab(tabId);
     }
-    
+
+    async function hangleUpdateBestVehiclesButton() {
+        const url = process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vehicle/updatebest/'
+        
+        const res = await head(url);
+
+        console.log(res);
+        if(res.success){
+            alert("Best vehicles are updated successfully")
+        } else {
+            alert("Best vehicles are not updated")
+        }
+    }
+
     return (
         <div>
+            <Button 
+                style={{position: "absolute", left: '20px'}}
+                onClick={hangleUpdateBestVehiclesButton}
+            >
+                Update Best Vehicles
+            </Button>
             <Nav tabs>
                 <NavItem>
                     <NavLink

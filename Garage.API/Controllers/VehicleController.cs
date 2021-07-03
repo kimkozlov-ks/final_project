@@ -48,7 +48,15 @@ namespace Garage.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SendVehicleDto>> GetById([FromRoute] int id)
         {
-            return await _vehicleService.GetVehicleById(id);
+            return Ok(await _vehicleService.GetVehicleById(id));
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpHead("updatebest")]
+        public async Task<ActionResult> UpdateBestVehicles()
+        {
+            await _vehicleService.UpdateBestVehicles();
+            return Ok();
         }
         
         [Authorize]

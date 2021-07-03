@@ -47,7 +47,9 @@ namespace Garage.API.Mappers
                         opt.MapFrom(src => src.Id))
                     .ForMember(dest =>
                         dest.DayOfBest, opt =>
-                        opt.MapFrom(src => src.CreateDate.Date))
+                        opt.MapFrom((src, dst, _, context) =>
+                            context.Options.Items["date"]
+                    ))
                     .ForMember(dest => 
                         dest.Id, opt => 
                             opt.Ignore());

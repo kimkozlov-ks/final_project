@@ -42,16 +42,6 @@ namespace Garage.API.Repositories
                 .ToListAsync();
         }
         
-        public async Task<List<VehicleEntity>> GetBestVehiclesFromYesterday()
-        {
-            return await GetDbContext().Vehicles
-                .Where(v =>
-                    v.CreateDate.Day == (DateTime.Now.Day - 1) && v.Rating == GetDbContext().Vehicles
-                        .Where(ve => 
-                            ve.CreateDate.Day == (DateTime.Now.Day - 1)).Max(ve2 => ve2.Rating))
-                .ToListAsync();
-        }
-
         public async Task<int> GetFilteredCount(Expression<Func<VehicleEntity, bool>> filter)
         {
             return await GetDbContext().Vehicles

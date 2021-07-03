@@ -28,15 +28,20 @@ namespace Garage.API.Workers
         public async Task Execute(IJobExecutionContext context)
         {
             using var scope = _service.CreateScope();
-            
+
+            var yesterday = DateTime.Now.Date.AddDays(-1);
             var voteRepository = scope.ServiceProvider.GetRequiredService<VoteRepository>();
-            var bestVehiclesId = await voteRepository.GetBestVehiclesIdFromYesterday();
+            var bestVehiclesId = await voteRepository.GetBestVehiclesIdFromDay(yesterday);
             var vehicleRepository = scope.ServiceProvider.GetRequiredService<VehicleRepository>();
             var bestVehicles = await vehicleRepository.GetByListIds(bestVehiclesId);
             var bestVehicleRepository = scope.ServiceProvider.GetRequiredService<BestVehiclesRepository>();
+            await bestVehicleRepository.RemoveByDate(yesterday);
             var bestVehiclesMapped =
                 bestVehicles.Select(bV => 
-                    _mapper.Map<BestVehicleEntity>(bV)).ToList();
+                    _mapper.Map<BestVehicleEntity>(bV, opt =>
+                    {
+                        opt.Items["date"] = yesterday;
+                    })).ToList();
             foreach (var bV in bestVehiclesMapped)
                 await bestVehicleRepository.Add(bV);
         }

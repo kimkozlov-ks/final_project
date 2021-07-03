@@ -194,5 +194,20 @@ namespace Garage.API.Services
         {
             return await _vehicleRepository.Delete(id);
         }
+
+        public async Task UpdateBestVehicles()
+        {
+            await _bestVehiclesRepository.RemoveByDate(DateTime.Now.Date);
+            var bestVehiclesId = await _voteService.GetBestVehiclesIdToday();
+            var bestVehicles = await _vehicleRepository.GetByListIds(bestVehiclesId);
+            var bestVehiclesMapped =
+                bestVehicles.Select(bV => 
+                    _mapper.Map<BestVehicleEntity>(bV, opt =>
+                    {
+                        opt.Items["date"] = DateTime.Now.Date.AddDays(-1);
+                    })).ToList();
+            foreach (var bV in bestVehiclesMapped)
+                await _bestVehiclesRepository.Add(bV);
+        }
     }
 }
