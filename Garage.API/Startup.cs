@@ -47,16 +47,11 @@ namespace Garage.API
                 q.UseMicrosoftDependencyInjectionScopedJobFactory();
                 var jobKey = new JobKey("BestVehiclesJob");
                 q.AddJob<BestVehicleWorker>(opts => opts.WithIdentity(jobKey));
-
+                
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
-                    .WithIdentity("BestVehiclesJob-trigger") 
-                    .WithCronSchedule("0 0/1 * * * ?")); // fired every 5 minutes
-
-                // q.AddTrigger(opts => opts
-                //     .ForJob(jobKey)
-                //     .WithIdentity("BestVehiclesJob-trigger")
-                //     .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0))); // fired every day at 00 00
+                    .WithIdentity("BestVehiclesJob-trigger")
+                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0))); // fired every day at 00 00
             });
 
             services.AddQuartzServer(options =>
