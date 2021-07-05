@@ -42,6 +42,7 @@ const VehicleCard: React.FC<Props> = ({
         }
         const res = await post(process.env.REACT_APP_GARAGE_API_BASE_URL + 'api/vote/',  JSON.stringify(vote), headers)
         
+        debugger
         if(res.statusCode == 409){
             alert('You have already voted for this vehicle!')
             return;

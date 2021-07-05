@@ -143,7 +143,7 @@ export const reducer: Reducer<TypesState> = (state: TypesState = emptyState, inc
                 ...state,
                 vehicleType: [...state.vehicleType, ...action.types],
             };
-        case 'ADD_TYPE':
+        case 'ADD_TYPE': 
             return {
                 ...state,
                 vehicleType: [...state.vehicleType, action.vehicleType],

@@ -15,19 +15,13 @@ type TypesProps =
     typeof TypesStore.actionCreators;
 
 function TypesTab(typesProps: TypesProps) {
-
-    typesProps.getTypes();
-
+    
     const [inputValues, setInput] = useState(['']);
     const [addTypeInput, setAddTypeInput] = useState('');
 
-    function onClickType(event: React.MouseEvent, id: number) {
-        typesProps.getSubType(id);
-    }
-
     function renderSubtypes(type: Type)
     {
-        if(type.subTypes === undefined) return;
+        if(type.subTypes === undefined) return null;
 
         return (
             <ul>
@@ -58,8 +52,12 @@ function TypesTab(typesProps: TypesProps) {
         <div>
             <ul>
                 {
-                    typesProps.vehicleType.map((el, index) =>
-                        <li key={index} onClick={(event) => onClickType(event, el.id)} >
+                    typesProps.vehicleType.map((el, index) => 
+                    {
+                        if(el === undefined) return null
+                        
+                        return (
+                        <li key={index} >
                             {el.name}
                             {renderSubtypes(el)}
                             <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}
@@ -67,6 +65,7 @@ function TypesTab(typesProps: TypesProps) {
                             <button onClick={() => addSubType(el.id, index)}>Add</button>
 
                         </li>)
+                    })
                 }
             </ul>
 

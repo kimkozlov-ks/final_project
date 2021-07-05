@@ -17,15 +17,9 @@ type BrandsProps =
 
 function BrandsTab(brandsProps: BrandsProps) {
 
-    brandsProps.getBrands();
-
     const [inputValues, setInput] = useState(['']);
     const [addTypeInput, setAddTypeInput] = useState('');
     
-    function onClickType(event: React.MouseEvent, id: number) {
-        brandsProps.getModels(id);
-    }
-
     function renderModels(brand: Brand)
     {
         if(brand.models === undefined) return;
@@ -60,7 +54,7 @@ function BrandsTab(brandsProps: BrandsProps) {
             <ul>
                 {
                     brandsProps.brands.map((el, index) =>
-                        <li key={index} onClick={(event) => onClickType(event, el.id)} >
+                        <li key={index}  >
                             {el.name}
                             {renderModels(el)}
                             <input name={el.name} placeholder={'new subtype'}  value={inputValues[index]} type='text' onChange={(event) => handleChange(event, index)}

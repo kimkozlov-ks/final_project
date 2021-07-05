@@ -42,9 +42,13 @@ export async function post(url: string, body: string | FormData, headers?: any) 
         {
             return {success: false, err: `Status code ${res.status}`, statusCode: res.status};
         }
-        
-        if(res.bodyUsed){
-            const data = await res.json();
+
+        if(!res.bodyUsed){
+            let data
+            try{
+                data = await res.json();
+            } catch (e){}
+            
             return {success: true, body: data};
         }
 
